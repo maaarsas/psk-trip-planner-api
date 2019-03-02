@@ -21,6 +21,4 @@ services:
       DB_HOST: db
       DB_PORT: 5432
     volumes:
-      - ./log:/app/log
-      - ./.m2:/app/.m2/
-      - ./target:/app/target/
+      - ./target:/copy

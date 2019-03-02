@@ -30,29 +30,26 @@ ENV JAVA_OPTS=""
 
 #Create base app folder
 RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
 
 #Create folder to save configuration files
 RUN mkdir $APP_HOME/config
 
 #Create folder with application logs
 RUN mkdir $APP_HOME/log
-
 RUN mkdir $APP_HOME/target
-
-VOLUME $APP_HOME/log
-VOLUME $APP_HOME/config
-VOLUME $APP_HOME/target
+RUN mkdir $APP_HOME/original
 
 RUN mkdir $APP_HOME/.m2
 COPY --from=builder /root/.m2 $APP_HOME/.m2
-VOLUME $APP_HOME/.m2
 
-WORKDIR $APP_HOME
 
 #Copy executable jar file from the builder image
-COPY --from=builder /build/target/*.jar app.jar
+COPY --from=builder /build/target $APP_HOME/original
+#COPY --from=builder /build/target/*.jar app.jar
 
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar app.jar" ]
+RUN mkdir /copy
 
-#Second option using shell form:
-#ENTRYPOINT exec java $JAVA_OPTS -jar app.jar $0 $@
+COPY ./entryscript.sh .
+RUN chmod 777 ./entryscript.sh
+ENTRYPOINT ["sh", "-c", "./entryscript.sh"]
