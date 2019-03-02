@@ -23,3 +23,4 @@ services:
     volumes:
       - ./log:/app/log
       - ./.m2:/app/.m2/
+      - ./target:/app/target/

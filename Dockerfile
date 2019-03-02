@@ -37,8 +37,11 @@ RUN mkdir $APP_HOME/config
 #Create folder with application logs
 RUN mkdir $APP_HOME/log
 
+RUN mkdir $APP_HOME/target
+
 VOLUME $APP_HOME/log
 VOLUME $APP_HOME/config
+VOLUME $APP_HOME/target
 
 RUN mkdir $APP_HOME/.m2
 COPY --from=builder /root/.m2 $APP_HOME/.m2

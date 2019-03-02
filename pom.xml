@@ -92,8 +92,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-maven-plugin</artifactId>
-			<version>3.4.1</version>
+			<artifactId>liquibase-core</artifactId>
+			<version>3.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -127,9 +132,30 @@
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>3.4.1</version>
+				<version>${liquibase.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.liquibase.ext</groupId>
+						<artifactId>liquibase-hibernate5</artifactId>
+						<version>3.6</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-data-jpa</artifactId>
+						<version>2.0.0.RELEASE</version>
+					</dependency>
+
+					<!-- Add your maven project which hosts your entities classes -->
+					<dependency>
+						<groupId>lt.vu</groupId>
+						<artifactId>trip</artifactId>
+						<version>0.0.1-SNAPSHOT</version>
+					</dependency>
+
+				</dependencies>
 				<configuration>
-					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
+					<url>hibernate:spring:lt.vu.trip.entity?dialect=liquibase.ext.hibernate.database.HibernateGenericDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</url>
+					<driver>liquibase.ext.hibernate.database.connection.HibernateDriver</driver>
 				</configuration>
 			</plugin>
 		</plugins>
