@@ -14,7 +14,7 @@ insert_final_newline = true
 charset = utf-8
 
 # tab indentation
-[*.java]
+[*]
 indent_style = tab
 
 # Matches the exact files either package.json or .travis.yml
