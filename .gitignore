@@ -32,3 +32,13 @@
 .m2
 
 /log/
+
+/target/
+
+### Exceptions for .idea
+!/.idea/codeStyles/codeStyleConfig.xml
+!/.idea/codeStyles/Project.xml
+!/.idea/dataSources.xml
+!/.idea/misc.xml
+!/.idea/vcs.xml
+
