@@ -12,11 +12,20 @@
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/*
 *.iws
 *.iml
 *.ipr
 /out/
+
+### Exceptions for .idea
+!.idea/dataSources.xml
+!.idea/misc.xml
+!.idea/vcs.xml
+!.idea/codeStyles
+.idea/codeStyles/*
+!.idea/codeStyles/codeStyleConfig.xml
+!.idea/codeStyles/Project.xml
 
 ### NetBeans ###
 /nbproject/private/
@@ -34,11 +43,4 @@
 /log/
 
 /target/
-
-### Exceptions for .idea
-!/.idea/codeStyles/codeStyleConfig.xml
-!/.idea/codeStyles/Project.xml
-!/.idea/dataSources.xml
-!/.idea/misc.xml
-!/.idea/vcs.xml
 
