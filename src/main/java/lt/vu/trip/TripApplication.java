@@ -1,13 +1,13 @@
-package lt.vu.trips;
+package lt.vu.trip;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TripsApplication {
+public class TripApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TripsApplication.class, args);
+		SpringApplication.run(TripApplication.class, args);
 	}
 
 }

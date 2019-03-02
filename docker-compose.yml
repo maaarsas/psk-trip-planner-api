@@ -6,7 +6,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: trip
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - .database_data:/var/lib/postgresql/data
   api:
@@ -16,6 +18,8 @@ services:
       - 5005:5005
     environment:
       JAVA_OPTS: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
+      DB_HOST: db
+      DB_PORT: 5432
     volumes:
       - ./log:/app/log
       - ./.m2:/app/.m2/
