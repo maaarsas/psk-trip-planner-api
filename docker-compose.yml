@@ -4,12 +4,18 @@ services:
   db:
     image: postgres:11.2-alpine
     ports:
-    - 5432:5432
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: 'postgres'
     volumes:
-    - .database_data:/var/lib/postgresql/data
+      - .database_data:/var/lib/postgresql/data
   api:
     image: test/trip-planner-api
     ports:
-    - 8081:8080
+      - 8081:8080
+      - 5005:5005
+    environment:
+      JAVA_OPTS: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
+    volumes:
+      - ./log:/app/log
+      - ./.m2:/app/.m2/
