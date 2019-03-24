@@ -1,10 +1,7 @@
 package lt.vu.trip.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -33,7 +30,19 @@ public class TripParticipation {
 	@Enumerated(EnumType.STRING)
 	private TripParticipationStatus status;
 
+	@Setter(AccessLevel.PRIVATE)
 	private LocalDateTime createdDateTime;
 
+	@Setter(AccessLevel.PRIVATE)
 	private LocalDateTime lastEditDateTime;
+
+	@PrePersist
+	protected void onCreate() {
+		this.createdDateTime = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.lastEditDateTime = LocalDateTime.now();
+	}
 }
