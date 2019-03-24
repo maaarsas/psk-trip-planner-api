@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
+	private Long id;
 
 	@NotEmpty
 	@Column(unique = true)
@@ -32,6 +32,13 @@ public class User implements UserDetails {
 
 	@NotEmpty
 	private String password;
+
+	private String name;
+
+	private String surname;
+
+	@OneToMany(mappedBy = "participant")
+	private List<TripParticipation> tripParticipations = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
