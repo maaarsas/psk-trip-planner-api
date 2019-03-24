@@ -1,4 +1,4 @@
-package lt.vu.trip.service.auth;
+package lt.vu.trip.service.auth.jwt;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;

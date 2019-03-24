@@ -1,4 +1,4 @@
-package lt.vu.trip.service.auth;
+package lt.vu.trip.service.auth.jwt;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

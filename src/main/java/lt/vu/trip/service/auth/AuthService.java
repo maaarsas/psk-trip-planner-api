@@ -1,0 +1,5 @@
+package lt.vu.trip.service.auth;
+
+public interface AuthService {
+	String login(String username, String password);
+}

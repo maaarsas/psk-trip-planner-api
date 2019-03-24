@@ -1,4 +1,4 @@
-package lt.vu.trip.service.auth;
+package lt.vu.trip.service.auth.jwt;
 
 import lt.vu.trip.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

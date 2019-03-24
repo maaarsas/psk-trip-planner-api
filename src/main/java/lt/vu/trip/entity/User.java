@@ -27,6 +27,7 @@ public class User implements UserDetails {
 	Long id;
 
 	@NotEmpty
+	@Column(unique = true)
 	private String username;
 
 	@NotEmpty
