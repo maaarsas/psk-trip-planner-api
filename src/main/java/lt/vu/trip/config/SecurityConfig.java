@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.cors()
 			.and()
-			.apply(new JwtConfigurer(this.jwtTokenProvider));
+			.apply(new JwtConfigurer(jwtTokenProvider));
 		//@formatter:on
 	}
 

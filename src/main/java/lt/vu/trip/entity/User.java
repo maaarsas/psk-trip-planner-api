@@ -53,19 +53,19 @@ public class User implements UserDetails {
 	@Override
 	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 	}
 
 	@Override
 	@JsonIgnore
 	public String getPassword() {
-		return this.password;
+		return password;
 	}
 
 	@Override
 	@JsonIgnore
 	public String getUsername() {
-		return this.username;
+		return username;
 	}
 
 	@Override

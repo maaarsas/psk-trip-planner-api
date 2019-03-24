@@ -14,11 +14,11 @@ public class TripServiceImpl implements TripService {
 	private TripRepository repo;
 
 	public List<Trip> getAll() {
-		return this.repo.findAll();
+		return repo.findAll();
 	}
 
 	public boolean createNew(Trip trip) {
-		this.repo.saveAndFlush(trip);
+		repo.saveAndFlush(trip);
 		return true;
 	}
 }

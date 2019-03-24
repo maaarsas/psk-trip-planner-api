@@ -22,9 +22,9 @@ public class JwtAuthService implements AuthService {
 
 	@Override
 	public String login(String username, String password) {
-		this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		String token = this.jwtTokenProvider.createToken(username,
-				this.users.findByUsername(username)
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		String token = jwtTokenProvider.createToken(username,
+				users.findByUsername(username)
 						.orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found"))
 						.getRoles()
 		);

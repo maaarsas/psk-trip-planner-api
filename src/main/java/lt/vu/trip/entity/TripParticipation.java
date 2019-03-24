@@ -38,11 +38,11 @@ public class TripParticipation {
 
 	@PrePersist
 	protected void onCreate() {
-		this.createdDateTime = LocalDateTime.now();
+		createdDateTime = LocalDateTime.now();
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		this.lastEditDateTime = LocalDateTime.now();
+		lastEditDateTime = LocalDateTime.now();
 	}
 }

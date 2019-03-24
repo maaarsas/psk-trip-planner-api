@@ -17,13 +17,13 @@ public class TripController {
 
 	@GetMapping("")
 	public ResponseEntity<List<Trip>> getAllTrips() {
-		List<Trip> trips = this.tripService.getAll();
+		List<Trip> trips = tripService.getAll();
 		return ResponseEntity.ok(trips);
 	}
 
 	@PostMapping("")
 	public ResponseEntity<Trip> createTrip(@RequestBody Trip trip) {
-		this.tripService.createNew(trip);
+		tripService.createNew(trip);
 		return ResponseEntity.ok(trip);
 	}
 }

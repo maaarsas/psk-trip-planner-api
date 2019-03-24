@@ -48,14 +48,14 @@ public class DemoController {
 		String password = data.getPassword();
 		User newUser = User.builder()
 				.username(username)
-				.password(this.passwordEncoder.encode(password))
+				.password(passwordEncoder.encode(password))
 				.roles(Arrays.asList("ROLE_USER"))
 				.build();
-		this.users.save(newUser);
+		users.save(newUser);
 
-		this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-		String token = this.jwtTokenProvider.createToken(username,
-				this.users.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
+		String token = jwtTokenProvider.createToken(username,
+				users.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
 		Map<Object, Object> model = new HashMap<>();
 		model.put("username", username);
 		model.put("token", token);

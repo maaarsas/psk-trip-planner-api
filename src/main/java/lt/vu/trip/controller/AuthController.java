@@ -26,7 +26,7 @@ public class AuthController {
 		String username = data.getUsername();
 		String password = data.getPassword();
 		try {
-			String token = this.authService.login(username, password);
+			String token = authService.login(username, password);
 			Map<Object, Object> model = new HashMap<>();
 			model.put("username", username);
 			model.put("token", token);
