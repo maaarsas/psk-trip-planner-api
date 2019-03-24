@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component;
 public class JwtAuthService implements AuthService {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	JwtTokenProvider jwtTokenProvider;
+	private JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
-	UserRepository users;
+	private UserRepository users;
 
 	@Override
 	public String login(String username, String password) {
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		String token = this.jwtTokenProvider.createToken(username,
 				this.users.findByUsername(username)
 						.orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found"))

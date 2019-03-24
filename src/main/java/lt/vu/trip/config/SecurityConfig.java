@@ -42,10 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.cors()
 			.and()
-			.apply(new JwtConfigurer(this.jwtTokenProvider))
-			.and()
-			.logout().logoutUrl("/auth/logout")
-		;
+			.apply(new JwtConfigurer(this.jwtTokenProvider));
 		//@formatter:on
 	}
 
