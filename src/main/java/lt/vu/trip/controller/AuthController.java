@@ -1,16 +1,11 @@
 package lt.vu.trip.controller;
 
 import lt.vu.trip.entity.request.AuthenticationRequest;
-import lt.vu.trip.repository.UserRepository;
-import lt.vu.trip.service.auth.JwtTokenProvider;
-import lt.vu.trip.service.auth.RegistrationService;
+import lt.vu.trip.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,24 +19,14 @@ import java.util.Map;
 public class AuthController {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
-
-	@Autowired
-	JwtTokenProvider jwtTokenProvider;
-
-	@Autowired
-	UserRepository users;
-
-	@Autowired
-	RegistrationService registrationService;
+	private AuthService authService;
 
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody AuthenticationRequest data) {
+		String username = data.getUsername();
+		String password = data.getPassword();
 		try {
-			String username = data.getUsername();
-			this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-			String token = this.jwtTokenProvider.createToken(username,
-					this.users.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
+			String token = authService.login(username, password);
 			Map<Object, Object> model = new HashMap<>();
 			model.put("username", username);
 			model.put("token", token);
@@ -49,20 +34,5 @@ public class AuthController {
 		} catch (AuthenticationException e) {
 			throw new BadCredentialsException("Invalid username/password supplied");
 		}
-	}
-
-	@PostMapping("/register")
-	public ResponseEntity register(@RequestBody AuthenticationRequest data) {
-		String username = data.getUsername();
-		String password = data.getPassword();
-		this.registrationService.register(username, password);
-
-		this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-		String token = this.jwtTokenProvider.createToken(username,
-				this.users.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
-		Map<Object, Object> model = new HashMap<>();
-		model.put("username", username);
-		model.put("token", token);
-		return ResponseEntity.ok(model);
 	}
 }

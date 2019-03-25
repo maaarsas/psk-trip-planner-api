@@ -1,7 +1,7 @@
 package lt.vu.trip.config;
 
-import lt.vu.trip.service.auth.JwtConfigurer;
-import lt.vu.trip.service.auth.JwtTokenProvider;
+import lt.vu.trip.service.auth.jwt.JwtConfigurer;
+import lt.vu.trip.service.auth.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,12 +37,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.authorizeRequests()
 			.antMatchers("/auth/login").permitAll()
-			.antMatchers("/auth/register").permitAll()
+			.antMatchers("/demo").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.cors()
 			.and()
-			.apply(new JwtConfigurer(this.jwtTokenProvider));
+			.apply(new JwtConfigurer(jwtTokenProvider));
 		//@formatter:on
 	}
 
