@@ -4,7 +4,13 @@ import lt.vu.trip.entity.Trip;
 import org.springframework.data.domain.Page;
 
 public interface TripService {
-	Page<Trip> getAll(int page, int resultsPerPage);
+	Page<Trip> getAll(int page, int resultsPerPage, TripSearchCriteria criteria);
+
+	Page<Trip> getOrganizedByCurrentUser(int page, int resultsPerPage, TripSearchCriteria criteria);
+
+	Page<Trip> getCurrentUserParticipatingIn(int page, int resultsPerPage, TripSearchCriteria criteria);
+
+	Page<Trip> getCurrentUserInvitedIn(int page, int resultsPerPage, TripSearchCriteria criteria);
 
 	boolean createNew(Trip trip);
 }
