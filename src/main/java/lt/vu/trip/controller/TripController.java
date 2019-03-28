@@ -2,6 +2,7 @@ package lt.vu.trip.controller;
 
 import lt.vu.trip.entity.Trip;
 import lt.vu.trip.entity.request.TripRequestParams;
+import lt.vu.trip.entity.response.TripListResponse;
 import lt.vu.trip.service.trip.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/trip")
@@ -19,9 +19,14 @@ public class TripController {
 	private TripService tripService;
 
 	@GetMapping("")
-	public ResponseEntity<List<Trip>> getAllTrips(@Valid TripRequestParams requestParams) {
+	public ResponseEntity<TripListResponse> getAllTrips(@Valid TripRequestParams requestParams) {
 		Page<Trip> trips = tripService.getAll(requestParams.getPage(), requestParams.getResultsPerPage());
-		return ResponseEntity.ok(trips.getContent());
+		TripListResponse response = TripListResponse.builder()
+				.totalPageCount(trips.getTotalPages())
+				.totalResultsCount(trips.getTotalElements())
+				.results(trips.getContent())
+				.build();
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("")
