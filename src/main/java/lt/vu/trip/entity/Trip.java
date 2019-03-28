@@ -1,6 +1,7 @@
 package lt.vu.trip.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Trip {
 	private User organizer;
 
 	@OneToMany(mappedBy = "trip")
+	@JsonManagedReference
 	private List<TripParticipation> tripParticipations = new ArrayList<>();
 
 	private LocalDate startDate;
