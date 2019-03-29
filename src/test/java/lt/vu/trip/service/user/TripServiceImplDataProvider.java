@@ -39,8 +39,42 @@ public class TripServiceImplDataProvider {
 				{1, 100, new String[]{null, null, null, null}, 1, 3, 1, new Long[]{1L, 2L, 4L}}, // get all
 				{1, 100, new String[]{null, null, null, null}, 3, 0, 0, new Long[]{}}, // get all
 				{1, 100, new String[]{"2020-04-20", null, null, null}, 1, 0, 0, new Long[]{}}, // get all, no results
-				{1, 2, new String[]{"2019-02-19", null, null, null}, 2, 1, 1, new Long[]{3L}}, // start date limited, second page
+				{1, 2, new String[]{"2019-02-19", null, null, null}, 2, 1, 1, new Long[]{3L}}, // start date limited,
 				{1, 10, new String[]{"2019-04-19", "2019-12-01", "2019-05-27", "2019-12-02"}, 1, 2, 1, new Long[]{2L, 4L}}, // both dates limited
+		};
+		for (Object[] line : data) {
+			line[2] = buildLocalDateList((String[])line[2]);
+			line[6] = buildLongIdsList((Long[])line[6]);
+		}
+		return data;
+	}
+
+	@DataProvider()
+	public static Object[][] getCurrentUserParticipatingInData() {
+		Object[][] data = new Object[][] {
+				// page, results per page, start date from, start date to, end date from, end date to, current user id
+				// expected element count, expected page count, expected ids of trips
+				{1, 100, new String[]{null, "2020-04-22", null, null}, 1, 1, 1, new Long[]{3L}}, // get all
+				{1, 100, new String[]{null, null, null, null}, 4, 0, 0, new Long[]{}}, // get all
+				{1, 100, new String[]{"2020-04-20", null, null, null}, 2, 0, 0, new Long[]{}}, // get all, no results
+				{2, 1, new String[]{"2019-02-19", null, null, null}, 2, 2, 2, new Long[]{1L}}, // start date limited
+		};
+		for (Object[] line : data) {
+			line[2] = buildLocalDateList((String[])line[2]);
+			line[6] = buildLongIdsList((Long[])line[6]);
+		}
+		return data;
+	}
+
+	@DataProvider()
+	public static Object[][] getCurrentUserInvitedInData() {
+		Object[][] data = new Object[][] {
+				// page, results per page, start date from, start date to, end date from, end date to, current user id
+				// expected element count, expected page count, expected ids of trips
+				{1, 100, new String[]{null, "2020-04-22", null, null}, 1, 0, 0, new Long[]{}}, // get all
+				{1, 100, new String[]{null, null, null, null}, 4, 0, 0, new Long[]{}}, // get all
+				{1, 100, new String[]{"2019-04-20", null, null, null}, 2, 1, 1, new Long[]{4L}}, // get all, no results
+				{2, 1, new String[]{"2019-02-19", null, null, null}, 3, 1, 1, new Long[]{}}, // start date limited
 		};
 		for (Object[] line : data) {
 			line[2] = buildLocalDateList((String[])line[2]);

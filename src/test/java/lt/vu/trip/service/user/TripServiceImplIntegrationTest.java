@@ -1,6 +1,5 @@
 package lt.vu.trip.service.user;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import lt.vu.trip.entity.Trip;
@@ -26,12 +25,8 @@ import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static io.restassured.RestAssured.when;
 
 @RunWith(DataProviderRunner.class)
 @SpringBootTest
@@ -61,8 +56,26 @@ public class TripServiceImplIntegrationTest {
 	@UseDataProvider(value = "getOrganizedByCurrentUserData", location = TripServiceImplDataProvider.class)
 	public void testGetOrganizedByCurrentUser(int page, int resultsPerPage, List<LocalDate> filterDates, int currentUserId,
 			int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
-		Mockito.when(userService.getCurrentUser()).thenReturn(User.builder().id(new Long(currentUserId)).build());
+		Mockito.when(userService.getCurrentUser()).thenReturn(User.builder().id((long) currentUserId).build());
 		Page<Trip> trips = tripService.getOrganizedByCurrentUser(page, resultsPerPage, buildSearchCriteria(filterDates));
+		assertTripPage(trips, expectedElementCount, expectedPageCount, expectedIds);
+	}
+
+	@Test
+	@UseDataProvider(value = "getCurrentUserParticipatingInData", location = TripServiceImplDataProvider.class)
+	public void testGetCurrentUserParticipatingIn(int page, int resultsPerPage, List<LocalDate> filterDates, int currentUserId,
+											  int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
+		Mockito.when(userService.getCurrentUser()).thenReturn(User.builder().id((long) currentUserId).build());
+		Page<Trip> trips = tripService.getCurrentUserParticipatingIn(page, resultsPerPage, buildSearchCriteria(filterDates));
+		assertTripPage(trips, expectedElementCount, expectedPageCount, expectedIds);
+	}
+
+	@Test
+	@UseDataProvider(value = "getCurrentUserInvitedInData", location = TripServiceImplDataProvider.class)
+	public void testGetCurrentUserInvitedIn(int page, int resultsPerPage, List<LocalDate> filterDates, int currentUserId,
+												  int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
+		Mockito.when(userService.getCurrentUser()).thenReturn(User.builder().id((long) currentUserId).build());
+		Page<Trip> trips = tripService.getCurrentUserInvitedIn(page, resultsPerPage, buildSearchCriteria(filterDates));
 		assertTripPage(trips, expectedElementCount, expectedPageCount, expectedIds);
 	}
 
