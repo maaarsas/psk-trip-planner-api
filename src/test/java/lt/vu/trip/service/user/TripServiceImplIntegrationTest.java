@@ -46,37 +46,32 @@ public class TripServiceImplIntegrationTest {
 	private UserService userService;
 
 	@Test
-	@UseDataProvider("getAllParamsData")
-	public void testGetAll(int page, int resultsPerPage, LocalDate startDate, LocalDate endDate,
+	@UseDataProvider(value = "getAllParamsData", location = TripServiceImplDataProvider.class)
+	public void testGetAll(int page, int resultsPerPage, List<LocalDate> filterDates,
 						int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
-		TripSearchCriteria criteria = TripSearchCriteria.builder().startDate(startDate).endDate(endDate).build();
-
-		Page<Trip> trips = tripService.getAll(page, resultsPerPage, criteria);
-
-		Assert.assertEquals(expectedElementCount, trips.getTotalElements());
-		Assert.assertEquals(expectedPageCount, trips.getTotalPages());
-		Assert.assertThat(extractIdsFromTrips(trips.getContent()), IsIterableContainingInAnyOrder.containsInAnyOrder(
-				expectedIds.stream().map(Matchers::equalTo).collect(Collectors.toList())
-		));
+		Page<Trip> trips = tripService.getAll(page, resultsPerPage, buildSearchCriteria(filterDates));
+		assertTripPage(trips, expectedElementCount, expectedPageCount, expectedIds);
 	}
 
-	@DataProvider
-	public static Object[][] getAllParamsData() {
-		return new Object[][]{
-			// page, results per page, start date, end date, expected element count,
-			// expected page count, expected ids of trips
-			{1, 100, null, null, 4, 1, new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L))}, // get all
-			{1, 2, null, null, 4, 2, new ArrayList<>(Arrays.asList(2L, 3L))}, // first page, but not all elements
-			{2, 3, null, null, 4, 2, new ArrayList<>(Arrays.asList(4L))}, // second page
-			{1, 100, LocalDate.parse("2019-04-20"), null, 2, 1, new ArrayList<>(Arrays.asList(1L, 4L))}, // get all, start date limited
-			{1, 100, LocalDate.parse("2020-04-20"), null, 0, 0, new ArrayList<>(Arrays.asList())}, // get all, no results
-			{2, 2, LocalDate.parse("2019-04-19"), null, 3, 2, new ArrayList<>(Arrays.asList(4L))}, // start date limited, second page
-			{1, 10, LocalDate.parse("2019-04-19"), LocalDate.parse("2019-04-26"), 1, 1, new ArrayList<>(Arrays.asList(1L))}, // both dates limited
-		};
+	private TripSearchCriteria buildSearchCriteria(List<LocalDate> filterDates) {
+		return TripSearchCriteria.builder()
+				.startDateFrom(filterDates.get(0))
+				.startDateTo(filterDates.get(1))
+				.endDateFrom(filterDates.get(2))
+				.endDateTo(filterDates.get(3))
+				.build();
 	}
 
 	private List<Long> extractIdsFromTrips(List<Trip> trips) {
 		return trips.stream().map(Trip::getId).collect(Collectors.toList());
+	}
+
+	private void assertTripPage(Page<Trip> tripPage, int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
+		Assert.assertEquals(expectedElementCount, tripPage.getTotalElements());
+		Assert.assertEquals(expectedPageCount, tripPage.getTotalPages());
+		Assert.assertThat(extractIdsFromTrips(tripPage.getContent()), IsIterableContainingInAnyOrder.containsInAnyOrder(
+				expectedIds.stream().map(Matchers::equalTo).collect(Collectors.toList())
+		));
 	}
 
 	@TestConfiguration
