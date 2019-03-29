@@ -14,9 +14,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class TripSearchCriteria {
 
-	private LocalDate startDate;
+	private LocalDate startDateFrom;
 
-	private LocalDate endDate;
+	private LocalDate startDateTo;
+
+	private LocalDate endDateFrom;
+
+	private LocalDate endDateTo;
 
 	private Long organizerId;
 

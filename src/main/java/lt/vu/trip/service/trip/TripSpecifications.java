@@ -19,11 +19,17 @@ public class TripSpecifications {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (searchCriteria.getStartDate() != null) {
-					predicates.add(cb.greaterThanOrEqualTo(trip.<LocalDate>get("startDate"), searchCriteria.getStartDate()));
+				if (searchCriteria.getStartDateFrom() != null) {
+					predicates.add(cb.greaterThanOrEqualTo(trip.<LocalDate>get("startDate"), searchCriteria.getStartDateFrom()));
 				}
-				if (searchCriteria.getEndDate() != null) {
-					predicates.add(cb.lessThanOrEqualTo(trip.<LocalDate>get("endDate"), searchCriteria.getEndDate()));
+				if (searchCriteria.getStartDateTo() != null) {
+					predicates.add(cb.lessThanOrEqualTo(trip.<LocalDate>get("startDate"), searchCriteria.getStartDateTo()));
+				}
+				if (searchCriteria.getEndDateFrom() != null) {
+					predicates.add(cb.greaterThanOrEqualTo(trip.<LocalDate>get("endDate"), searchCriteria.getEndDateFrom()));
+				}
+				if (searchCriteria.getEndDateTo() != null) {
+					predicates.add(cb.lessThanOrEqualTo(trip.<LocalDate>get("endDate"), searchCriteria.getEndDateTo()));
 				}
 				if (searchCriteria.getOrganizerId() != null) {
 					final Join<Trip, User> organizer = trip.join("organizer");

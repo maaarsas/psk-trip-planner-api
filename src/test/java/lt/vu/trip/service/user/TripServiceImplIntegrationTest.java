@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class TripServiceImplIntegrationTest {
 
 	@ClassRule
-	public static final SpringClassRule SPRING_CLASS_RULE= new SpringClassRule();
+	public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
 
 	@Rule
 	public final SpringMethodRule springMethodRule = new SpringMethodRule();

@@ -61,8 +61,10 @@ public class TripController {
 
 	private TripSearchCriteria buildSearchCriteriaFromRequest(TripRequestParams requestParams) {
 		return TripSearchCriteria.builder()
-				.startDate(requestParams.getStartDate())
-				.endDate((requestParams.getEndDate()))
+				.startDateFrom(requestParams.getStartDateFrom())
+				.startDateTo(requestParams.getStartDateTo())
+				.endDateFrom((requestParams.getEndDateFrom()))
+				.endDateTo((requestParams.getEndDateTo()))
 				.build();
 	}
 

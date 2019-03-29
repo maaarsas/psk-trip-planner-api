@@ -23,8 +23,14 @@ public class TripRequestParams implements Serializable {
 	private int resultsPerPage = 10;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate startDate;
+	private LocalDate startDateFrom;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate endDate;
+	private LocalDate startDateTo;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate endDateFrom;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate endDateTo;
 }
