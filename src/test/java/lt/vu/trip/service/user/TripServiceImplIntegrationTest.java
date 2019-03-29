@@ -4,6 +4,7 @@ import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import lt.vu.trip.entity.Trip;
+import lt.vu.trip.entity.User;
 import lt.vu.trip.service.trip.TripSearchCriteria;
 import lt.vu.trip.service.trip.TripService;
 import lt.vu.trip.service.trip.TripServiceImpl;
@@ -14,6 +15,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -28,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.restassured.RestAssured.when;
 
 @RunWith(DataProviderRunner.class)
 @SpringBootTest
@@ -48,8 +52,17 @@ public class TripServiceImplIntegrationTest {
 	@Test
 	@UseDataProvider(value = "getAllParamsData", location = TripServiceImplDataProvider.class)
 	public void testGetAll(int page, int resultsPerPage, List<LocalDate> filterDates,
-						int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
+			int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
 		Page<Trip> trips = tripService.getAll(page, resultsPerPage, buildSearchCriteria(filterDates));
+		assertTripPage(trips, expectedElementCount, expectedPageCount, expectedIds);
+	}
+
+	@Test
+	@UseDataProvider(value = "getOrganizedByCurrentUserData", location = TripServiceImplDataProvider.class)
+	public void testGetOrganizedByCurrentUser(int page, int resultsPerPage, List<LocalDate> filterDates, int currentUserId,
+			int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
+		Mockito.when(userService.getCurrentUser()).thenReturn(User.builder().id(new Long(currentUserId)).build());
+		Page<Trip> trips = tripService.getOrganizedByCurrentUser(page, resultsPerPage, buildSearchCriteria(filterDates));
 		assertTripPage(trips, expectedElementCount, expectedPageCount, expectedIds);
 	}
 

@@ -25,18 +25,44 @@ public class TripServiceImplDataProvider {
 			{1, 10, new String[]{"2019-04-19", "2019-12-01", "2019-05-27", "2019-12-02"}, 2, 1, new Long[]{2L, 4L}}, // both dates limited
 		};
 		for (Object[] line : data) {
-			List<LocalDate> dateList = new ArrayList<>();
-			for (String date : (String[])line[2]) {
-				if (date == null) {
-					dateList.add(null);
-				} else {
-					dateList.add(LocalDate.parse(date));
-				}
-			}
-			line[2] = dateList;
-			line[5] = new ArrayList<Long>(Arrays.asList((Long[])line[5]));
+			line[2] = buildLocalDateList((String[])line[2]);
+			line[5] = buildLongIdsList((Long[])line[5]);
 		}
 		return data;
+	}
+
+	@DataProvider()
+	public static Object[][] getOrganizedByCurrentUserData() {
+		Object[][] data = new Object[][] {
+				// page, results per page, start date from, start date to, end date from, end date to, current user id
+				// expected element count, expected page count, expected ids of trips
+				{1, 100, new String[]{null, null, null, null}, 1, 3, 1, new Long[]{1L, 2L, 4L}}, // get all
+				{1, 100, new String[]{null, null, null, null}, 3, 0, 0, new Long[]{}}, // get all
+				{1, 100, new String[]{"2020-04-20", null, null, null}, 1, 0, 0, new Long[]{}}, // get all, no results
+				{1, 2, new String[]{"2019-02-19", null, null, null}, 2, 1, 1, new Long[]{3L}}, // start date limited, second page
+				{1, 10, new String[]{"2019-04-19", "2019-12-01", "2019-05-27", "2019-12-02"}, 1, 2, 1, new Long[]{2L, 4L}}, // both dates limited
+		};
+		for (Object[] line : data) {
+			line[2] = buildLocalDateList((String[])line[2]);
+			line[6] = buildLongIdsList((Long[])line[6]);
+		}
+		return data;
+	}
+
+	private static List<LocalDate> buildLocalDateList(String[] dates){
+		List<LocalDate> dateList = new ArrayList<>();
+		for (String date : dates) {
+			if (date == null) {
+				dateList.add(null);
+			} else {
+				dateList.add(LocalDate.parse(date));
+			}
+		}
+		return dateList;
+	}
+
+	private static List<Long> buildLongIdsList(Long[] ids) {
+		return new ArrayList<Long>(Arrays.asList(ids));
 	}
 
 }
