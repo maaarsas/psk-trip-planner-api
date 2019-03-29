@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TripServiceImplDataProvider {
 
-	@DataProvider()
+	@DataProvider
 	public static Object[][] getAllParamsData() {
 		Object[][] data = new Object[][] {
 			// page, results per page, start date from, start date to, end date from, end date to,
@@ -25,13 +25,13 @@ public class TripServiceImplDataProvider {
 			{1, 10, new String[]{"2019-04-19", "2019-12-01", "2019-05-27", "2019-12-02"}, 2, 1, new Long[]{2L, 4L}}, // both dates limited
 		};
 		for (Object[] line : data) {
-			line[2] = buildLocalDateList((String[])line[2]);
-			line[5] = buildLongIdsList((Long[])line[5]);
+			line[2] = buildLocalDateList((String[]) line[2]);
+			line[5] = buildLongIdsList((Long[]) line[5]);
 		}
 		return data;
 	}
 
-	@DataProvider()
+	@DataProvider
 	public static Object[][] getOrganizedByCurrentUserData() {
 		Object[][] data = new Object[][] {
 				// page, results per page, start date from, start date to, end date from, end date to, current user id
@@ -43,13 +43,13 @@ public class TripServiceImplDataProvider {
 				{1, 10, new String[]{"2019-04-19", "2019-12-01", "2019-05-27", "2019-12-02"}, 1, 2, 1, new Long[]{2L, 4L}}, // both dates limited
 		};
 		for (Object[] line : data) {
-			line[2] = buildLocalDateList((String[])line[2]);
-			line[6] = buildLongIdsList((Long[])line[6]);
+			line[2] = buildLocalDateList((String[]) line[2]);
+			line[6] = buildLongIdsList((Long[]) line[6]);
 		}
 		return data;
 	}
 
-	@DataProvider()
+	@DataProvider
 	public static Object[][] getCurrentUserParticipatingInData() {
 		Object[][] data = new Object[][] {
 				// page, results per page, start date from, start date to, end date from, end date to, current user id
@@ -60,13 +60,13 @@ public class TripServiceImplDataProvider {
 				{2, 1, new String[]{"2019-02-19", null, null, null}, 2, 2, 2, new Long[]{1L}}, // start date limited
 		};
 		for (Object[] line : data) {
-			line[2] = buildLocalDateList((String[])line[2]);
-			line[6] = buildLongIdsList((Long[])line[6]);
+			line[2] = buildLocalDateList((String[]) line[2]);
+			line[6] = buildLongIdsList((Long[]) line[6]);
 		}
 		return data;
 	}
 
-	@DataProvider()
+	@DataProvider
 	public static Object[][] getCurrentUserInvitedInData() {
 		Object[][] data = new Object[][] {
 				// page, results per page, start date from, start date to, end date from, end date to, current user id
@@ -77,13 +77,13 @@ public class TripServiceImplDataProvider {
 				{2, 1, new String[]{"2019-02-19", null, null, null}, 3, 1, 1, new Long[]{}}, // start date limited
 		};
 		for (Object[] line : data) {
-			line[2] = buildLocalDateList((String[])line[2]);
-			line[6] = buildLongIdsList((Long[])line[6]);
+			line[2] = buildLocalDateList((String[]) line[2]);
+			line[6] = buildLongIdsList((Long[]) line[6]);
 		}
 		return data;
 	}
 
-	private static List<LocalDate> buildLocalDateList(String[] dates){
+	private static List<LocalDate> buildLocalDateList(String[] dates) {
 		List<LocalDate> dateList = new ArrayList<>();
 		for (String date : dates) {
 			if (date == null) {

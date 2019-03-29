@@ -64,7 +64,7 @@ public class TripServiceImplIntegrationTest {
 	@Test
 	@UseDataProvider(value = "getCurrentUserParticipatingInData", location = TripServiceImplDataProvider.class)
 	public void testGetCurrentUserParticipatingIn(int page, int resultsPerPage, List<LocalDate> filterDates, int currentUserId,
-											  int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
+			int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
 		Mockito.when(userService.getCurrentUser()).thenReturn(User.builder().id((long) currentUserId).build());
 		Page<Trip> trips = tripService.getCurrentUserParticipatingIn(page, resultsPerPage, buildSearchCriteria(filterDates));
 		assertTripPage(trips, expectedElementCount, expectedPageCount, expectedIds);
@@ -73,7 +73,7 @@ public class TripServiceImplIntegrationTest {
 	@Test
 	@UseDataProvider(value = "getCurrentUserInvitedInData", location = TripServiceImplDataProvider.class)
 	public void testGetCurrentUserInvitedIn(int page, int resultsPerPage, List<LocalDate> filterDates, int currentUserId,
-												  int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
+			int expectedElementCount, int expectedPageCount, List<Long> expectedIds) {
 		Mockito.when(userService.getCurrentUser()).thenReturn(User.builder().id((long) currentUserId).build());
 		Page<Trip> trips = tripService.getCurrentUserInvitedIn(page, resultsPerPage, buildSearchCriteria(filterDates));
 		assertTripPage(trips, expectedElementCount, expectedPageCount, expectedIds);
