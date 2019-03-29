@@ -1,0 +1,325 @@
+swagger: '2.0'
+info:
+  title: Trip planner API
+  version: "1.0.0"
+
+# tags are used for organizing operations
+tags:
+- name: auth
+  description: Authentication related activities
+- name: trip
+  description: Trips
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: "Log in a user and get a token"
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema: 
+          $ref: '#/definitions/LoginRequestData'
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: '#/definitions/LoginResponseData'
+        403:
+          description: "Login failed"
+  /trip:
+    get:
+      tags:
+        - trip
+      parameters: 
+        - in: query
+          name: page
+          type: integer
+          description: "Page number. Default 1"
+        - in: query
+          name: resultsPerPage
+          type: integer
+          description: "Result count in one page. Default 10"
+        - in: query
+          name: startDateFrom
+          type: string
+          format: date
+          description: "Trip start date greater than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: startDateTo
+          type: string
+          format: date
+          description: "Trip start date less than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: endDateFrom
+          type: string
+          format: date
+          description: "Trip end date greater than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: endDateTo
+          type: string
+          format: date
+          description: "Trip end date less than or equal to this date. Format yyyy-mm-dd"
+      summary: "Get all trips"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/TripListResponse"
+    post:
+      tags: 
+        - trip
+      summary: "Create a trip"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Trip"
+  /trip/{id}:
+    get:
+      tags:
+        - trip
+      summary: "Get a trip"
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Trip"
+    put:
+      tags:
+        - trip
+      summary: "Edit a trip"
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Trip"
+  /trip/my:
+    get:
+      tags:
+        - trip
+      parameters: 
+        - in: query
+          name: page
+          type: integer
+          description: "Page number. Default 1"
+        - in: query
+          name: resultsPerPage
+          type: integer
+          description: "Result count in one page. Default 10"
+        - in: query
+          name: startDateFrom
+          type: string
+          format: date
+          description: "Trip start date greater than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: startDateTo
+          type: string
+          format: date
+          description: "Trip start date less than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: endDateFrom
+          type: string
+          format: date
+          description: "Trip end date greater than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: endDateTo
+          type: string
+          format: date
+          description: "Trip end date less than or equal to this date. Format yyyy-mm-dd"
+      summary: "Get my trips"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/TripListResponse"
+  /trip/invitation:
+    get:
+      tags:
+        - trip
+      parameters: 
+        - in: query
+          name: page
+          type: integer
+          description: "Page number. Default 1"
+        - in: query
+          name: resultsPerPage
+          type: integer
+          description: "Result count in one page. Default 10"
+        - in: query
+          name: startDateFrom
+          type: string
+          format: date
+          description: "Trip start date greater than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: startDateTo
+          type: string
+          format: date
+          description: "Trip start date less than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: endDateFrom
+          type: string
+          format: date
+          description: "Trip end date greater than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: endDateTo
+          type: string
+          format: date
+          description: "Trip end date less than or equal to this date. Format yyyy-mm-dd"
+      summary: "Get trips I am invited to"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/TripListResponse"
+  /trip/organized:
+    get:
+      tags:
+        - trip
+      parameters: 
+        - in: query
+          name: page
+          type: integer
+          description: "Page number. Default 1"
+        - in: query
+          name: resultsPerPage
+          type: integer
+          description: "Result count in one page. Default 10"
+        - in: query
+          name: startDateFrom
+          type: string
+          format: date
+          description: "Trip start date greater than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: startDateTo
+          type: string
+          format: date
+          description: "Trip start date less than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: endDateFrom
+          type: string
+          format: date
+          description: "Trip end date greater than or equal to this date. Format yyyy-mm-dd"
+        - in: query
+          name: endDateTo
+          type: string
+          format: date
+          description: "Trip end date less than or equal to this date. Format yyyy-mm-dd"
+      summary: "Get trips I am creator of"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/TripListResponse"
+  
+definitions:
+  LoginRequestData:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  LoginResponseData:
+    type: object
+    properties:
+      email:
+        type: string
+      token:
+        type: string
+  Office:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      maxCapacity:
+        type: integer
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      surname:
+        type: string
+  TripParticipation:
+    type: object
+    properties:
+      id:
+        type: integer
+      participant:
+        $ref: "#/definitions/User"
+      status:
+        type: string
+      createdDateTime:
+        type: string
+        format: date-time
+      lastEditDateTime:
+        type: string
+        format: date-time
+  Trip:
+    type: object
+    properties:
+      id: 
+        type: integer
+      organizer:
+        $ref: "#/definitions/User"
+      tripParticipations:
+        type: array
+        items:
+          $ref: "#/definitions/TripParticipation"
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date
+      fromOffice:
+        $ref: "#/definitions/Office"
+      toOffice:
+        $ref: "#/definitions/Office"
+      flightTicketStatus:
+        type: string
+      carRentalStatus:
+        type: string
+      accomodationStatus:
+        type: string
+      createdDateTime:
+        type: string
+        format: date-time
+      lastEditDateTime:
+        type: string
+        format: date-time
+  TripListResponse:
+    type: object
+    properties:
+      totalPageCount:
+        type: integer
+      totalResultsCount:
+        type: integer
+      results:
+        type: array
+        items: 
+          $ref: "#/definitions/Trip"
+
+schemes:
+ - https
+ - http
+host: 193.219.91.103:8081
