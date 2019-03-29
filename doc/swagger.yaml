@@ -320,6 +320,5 @@ definitions:
           $ref: "#/definitions/Trip"
 
 schemes:
- - https
  - http
 host: 193.219.91.103:8081
