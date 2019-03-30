@@ -19,7 +19,6 @@
 /out/
 
 ### Exceptions for .idea
-!.idea/dataSources.xml
 !.idea/misc.xml
 !.idea/vcs.xml
 !.idea/codeStyles
