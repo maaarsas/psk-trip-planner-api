@@ -2,6 +2,7 @@ package lt.vu.trip.controller;
 
 import lt.vu.trip.entity.User;
 import lt.vu.trip.entity.request.AuthenticationRequest;
+import lt.vu.trip.entity.response.LoginResponse;
 import lt.vu.trip.repository.UserRepository;
 import lt.vu.trip.service.auth.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * THIS CLASS IS DEMO. THIS CODE IS TEMPORARY AND IT WILL BE REMOVED
@@ -25,16 +24,16 @@ import java.util.Map;
 public class DemoController {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	JwtTokenProvider jwtTokenProvider;
+	private JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
-	UserRepository users;
+	private UserRepository users;
 
 	@Autowired
-	PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
 
 	@GetMapping("")
@@ -44,22 +43,19 @@ public class DemoController {
 
 	@PostMapping("/register")
 	public ResponseEntity register(@RequestBody AuthenticationRequest data) {
-		String username = data.getUsername();
+		String email = data.getEmail();
 		String password = data.getPassword();
 		User newUser = User.builder()
-				.username(username)
+				.username(email)
 				.password(passwordEncoder.encode(password))
 				.roles(Arrays.asList("ROLE_USER"))
 				.build();
 		users.save(newUser);
 
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-		String token = jwtTokenProvider.createToken(username,
-				users.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
-		Map<Object, Object> model = new HashMap<>();
-		model.put("username", username);
-		model.put("token", token);
-		return ResponseEntity.ok(model);
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, data.getPassword()));
+		String token = jwtTokenProvider.createToken(email,
+				users.findByUsername(email).orElseThrow(() -> new UsernameNotFoundException("Email " + email + "not found")).getRoles());
+		return ResponseEntity.ok(new LoginResponse(email, token));
 	}
 }
 

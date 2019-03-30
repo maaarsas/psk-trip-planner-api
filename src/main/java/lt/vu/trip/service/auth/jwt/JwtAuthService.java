@@ -21,11 +21,11 @@ public class JwtAuthService implements AuthService {
 	private UserRepository users;
 
 	@Override
-	public String login(String username, String password) {
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		String token = jwtTokenProvider.createToken(username,
-				users.findByUsername(username)
-						.orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found"))
+	public String login(String email, String password) {
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+		String token = jwtTokenProvider.createToken(email,
+				users.findByUsername(email)
+						.orElseThrow(() -> new UsernameNotFoundException("Email " + email + "not found"))
 						.getRoles()
 		);
 		return token;
