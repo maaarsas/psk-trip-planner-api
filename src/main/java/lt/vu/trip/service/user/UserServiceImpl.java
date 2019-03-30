@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 class UserServiceImpl implements UserService {
 
 	public User getCurrentUser() {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return user;
+		return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

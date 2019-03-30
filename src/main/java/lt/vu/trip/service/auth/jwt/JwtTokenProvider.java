@@ -32,25 +32,25 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 
-	public String createToken(String username, List<String> roles) {
-		Claims claims = Jwts.claims().setSubject(username);
+	public String createToken(String email, List<String> roles) {
+		Claims claims = Jwts.claims().setSubject(email);
 		claims.put("roles", roles);
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + validityInMilliseconds);
-		return Jwts.builder()//
-				.setClaims(claims)//
-				.setIssuedAt(now)//
-				.setExpiration(validity)//
-				.signWith(SignatureAlgorithm.HS256, secretKey)//
+		return Jwts.builder()
+				.setClaims(claims)
+				.setIssuedAt(now)
+				.setExpiration(validity)
+				.signWith(SignatureAlgorithm.HS256, secretKey)
 				.compact();
 	}
 
 	public Authentication getAuthentication(String token) {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
+		UserDetails userDetails = userDetailsService.loadUserByUsername(getEmail(token));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 
-	public String getUsername(String token) {
+	public String getEmail(String token) {
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
 	}
 
