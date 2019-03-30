@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "offices")
@@ -23,4 +25,7 @@ public class Office {
 	private String title;
 
 	private Integer maxCapacity;
+
+	@OneToMany(mappedBy = "office")
+	private List<OfficeReservation> reservations = new ArrayList<>();
 }
