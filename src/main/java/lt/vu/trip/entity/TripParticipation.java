@@ -1,5 +1,6 @@
 package lt.vu.trip.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class TripParticipation {
 
 	@NotNull
 	@ManyToOne
+	@JsonBackReference
 	private Trip trip;
 
 	@NotNull
