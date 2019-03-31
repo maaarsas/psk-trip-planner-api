@@ -273,6 +273,25 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/TripListResponse'
+  /user/search:
+    get:
+      tags:
+        - user
+      parameters:
+        - in: query
+          name: query
+          description: Search text
+          schema:
+            type: string
+      summary: Get trips I am creator of
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserList'  
+      
 servers:
   - url: 'http://193.219.91.103:8081/'
 components:
@@ -309,6 +328,10 @@ components:
           type: string
         surname:
           type: string
+    UserList:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
     TripParticipation:
       type: object
       properties:
