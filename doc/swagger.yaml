@@ -84,6 +84,12 @@ paths:
       tags:
         - trip
       summary: Create a trip
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripCreateRequest'
+        required: true
       responses:
         '200':
           description: Successful operation
@@ -299,7 +305,7 @@ components:
     LoginRequestData:
       type: object
       properties:
-        username:
+        email:
           type: string
         password:
           type: string
@@ -391,6 +397,48 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Trip'
+    TripCreateRequest:
+      type: object
+      properties:
+        organizer:
+          type: object
+          properties:
+            id:
+              type: integer
+        tripParticipations:
+          type: array
+          items:
+            type: object
+            properties:
+              participant:
+                type: object
+                properties:
+                  id:
+                    type: integer
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        fromOffice:
+          type: object
+          properties:
+            id:
+              type: integer
+        toOffice:
+          type: object
+          properties:
+            id:
+              type: integer
+        flightTicketStatus:
+          type: string
+        carRentalStatus:
+          type: string
+        accomodationStatus:
+          type: string
+        
+            
   # 1) Define the security scheme type (HTTP bearer)
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
