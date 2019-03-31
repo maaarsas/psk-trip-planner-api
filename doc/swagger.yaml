@@ -1,0 +1,446 @@
+openapi: 3.0.0
+info:
+  title: Trip planner API
+  version: "1.0.0-oas3"
+tags:
+  - name: auth
+    description: Authentication related activities
+  - name: trip
+    description: Trips
+    
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Log in a user and get a token
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseData'
+        '403':
+          description: Login failed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestData'
+        required: true
+      security: []
+  /trip:
+    get:
+      tags:
+        - trip
+      parameters:
+        - in: query
+          name: page
+          description: Page number. Default 1
+          schema:
+            type: integer
+        - in: query
+          name: resultsPerPage
+          description: Result count in one page. Default 10
+          schema:
+            type: integer
+        - in: query
+          name: startDateFrom
+          description: >-
+            Trip start date greater than or equal to this date. Format
+            yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: startDateTo
+          description: Trip start date less than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDateFrom
+          description: Trip end date greater than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDateTo
+          description: Trip end date less than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+      summary: Get all trips
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TripListResponse'
+    post:
+      tags:
+        - trip
+      summary: Create a trip
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Trip'
+  '/trip/{id}':
+    get:
+      tags:
+        - trip
+      summary: Get a trip
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Trip'
+    put:
+      tags:
+        - trip
+      summary: Edit a trip
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Trip'
+  /trip/my:
+    get:
+      tags:
+        - trip
+      parameters:
+        - in: query
+          name: page
+          description: Page number. Default 1
+          schema:
+            type: integer
+        - in: query
+          name: resultsPerPage
+          description: Result count in one page. Default 10
+          schema:
+            type: integer
+        - in: query
+          name: startDateFrom
+          description: >-
+            Trip start date greater than or equal to this date. Format
+            yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: startDateTo
+          description: Trip start date less than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDateFrom
+          description: Trip end date greater than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDateTo
+          description: Trip end date less than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+      summary: Get my trips
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TripListResponse'
+  /trip/invitation:
+    get:
+      tags:
+        - trip
+      parameters:
+        - in: query
+          name: page
+          description: Page number. Default 1
+          schema:
+            type: integer
+        - in: query
+          name: resultsPerPage
+          description: Result count in one page. Default 10
+          schema:
+            type: integer
+        - in: query
+          name: startDateFrom
+          description: >-
+            Trip start date greater than or equal to this date. Format
+            yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: startDateTo
+          description: Trip start date less than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDateFrom
+          description: Trip end date greater than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDateTo
+          description: Trip end date less than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+      summary: Get trips I am invited to
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TripListResponse'
+  /trip/organized:
+    get:
+      tags:
+        - trip
+      parameters:
+        - in: query
+          name: page
+          description: Page number. Default 1
+          schema:
+            type: integer
+        - in: query
+          name: resultsPerPage
+          description: Result count in one page. Default 10
+          schema:
+            type: integer
+        - in: query
+          name: startDateFrom
+          description: >-
+            Trip start date greater than or equal to this date. Format
+            yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: startDateTo
+          description: Trip start date less than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDateFrom
+          description: Trip end date greater than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDateTo
+          description: Trip end date less than or equal to this date. Format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+      summary: Get trips I am creator of
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TripListResponse'
+  /user/search:
+    get:
+      tags:
+        - user
+      parameters:
+        - in: query
+          name: query
+          description: Search text
+          schema:
+            type: string
+      summary: Search users by name or surname
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserList'  
+      
+servers:
+  - url: 'http://193.219.91.103:8081/'
+components:
+  schemas:
+    LoginRequestData:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    LoginResponseData:
+      type: object
+      properties:
+        email:
+          type: string
+        token:
+          type: string
+    Office:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        maxCapacity:
+          type: integer
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        surname:
+          type: string
+    UserList:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    TripParticipation:
+      type: object
+      properties:
+        id:
+          type: integer
+        participant:
+          $ref: '#/components/schemas/User'
+        status:
+          type: string
+        createdDateTime:
+          type: string
+          format: date-time
+        lastEditDateTime:
+          type: string
+          format: date-time
+    Trip:
+      type: object
+      properties:
+        id:
+          type: integer
+        organizer:
+          $ref: '#/components/schemas/User'
+        tripParticipations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TripParticipation'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        fromOffice:
+          $ref: '#/components/schemas/Office'
+        toOffice:
+          $ref: '#/components/schemas/Office'
+        flightTicketStatus:
+          type: string
+        carRentalStatus:
+          type: string
+        accomodationStatus:
+          type: string
+        createdDateTime:
+          type: string
+          format: date-time
+        lastEditDateTime:
+          type: string
+          format: date-time
+    TripListResponse:
+      type: object
+      properties:
+        totalPageCount:
+          type: integer
+        totalResultsCount:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trip'
+    TripCreateRequest:
+      type: object
+      properties:
+        tripParticipations:
+          type: array
+          items:
+            type: object
+            properties:
+              participant:
+                type: object
+                properties:
+                  id:
+                    type: integer
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        fromOffice:
+          type: object
+          properties:
+            id:
+              type: integer
+        toOffice:
+          type: object
+          properties:
+            id:
+              type: integer
+        flightTicketStatus:
+          type: string
+        carRentalStatus:
+          type: string
+        accomodationStatus:
+          type: string
+        
+            
+  # 1) Define the security scheme type (HTTP bearer)
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+      
+# 2) Apply the security globally to all operations
+security:
+  - bearerAuth: []         # use the same name as above
