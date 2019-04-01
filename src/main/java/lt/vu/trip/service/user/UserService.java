@@ -9,4 +9,6 @@ public interface UserService {
 	User getCurrentUser();
 
 	List<User> searchUsers(String query);
+
+	User getUser(Long id);
 }

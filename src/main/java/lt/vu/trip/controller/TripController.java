@@ -55,8 +55,7 @@ public class TripController {
 
 	@PostMapping("")
 	public ResponseEntity<Trip> createTrip(@RequestBody Trip trip) {
-		tripService.createNew(trip);
-		return ResponseEntity.ok(trip);
+		return ResponseEntity.ok(tripService.create(trip));
 	}
 
 	private TripSearchCriteria buildSearchCriteriaFromRequest(TripRequestParams requestParams) {
