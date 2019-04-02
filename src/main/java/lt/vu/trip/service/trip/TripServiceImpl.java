@@ -1,6 +1,7 @@
 package lt.vu.trip.service.trip;
 
 import lt.vu.trip.entity.*;
+import lt.vu.trip.entity.exception.TripValidationException;
 import lt.vu.trip.repository.TripRepository;
 import lt.vu.trip.service.office.OfficeService;
 import lt.vu.trip.service.user.UserService;
@@ -11,8 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -55,19 +56,19 @@ public class TripServiceImpl implements TripService {
 	}
 
 	public Trip create(Trip tripRequest) {
-		validator.validateTrip(tripRequest);// basic validation
+		validator.validateTrip(tripRequest); // basic validation
 
 		Trip trip = new Trip();
-		trip.setTripParticipations(getTripUsers(tripRequest));
+		trip.setTripParticipations(getTripUsers(tripRequest, trip)); // also validates users
 		trip.setOrganizer(userService.getCurrentUser());
 		trip.setStartDate(tripRequest.getStartDate());
 		trip.setEndDate(tripRequest.getEndDate());
-		trip.setFromOffice(getOffice(tripRequest.getFromOffice()));
-		trip.setToOffice(getOffice(tripRequest.getToOffice()));
+		trip.setFromOffice(getOffice(tripRequest.getFromOffice())); // also validates office
+		trip.setToOffice(getOffice(tripRequest.getToOffice())); // also validates office
 		trip.setAccomodationStatus(tripRequest.getAccomodationStatus());
 		trip.setCarRentalStatus(tripRequest.getCarRentalStatus());
 		trip.setFlightTicketStatus(tripRequest.getFlightTicketStatus());
-//		trip.setOfficeReservations(getOfficeReservations(tripRequest));
+		trip.setOfficeReservations(createOfficeReservation(trip));
 
 		return repo.saveAndFlush(trip);
 	}
@@ -84,9 +85,9 @@ public class TripServiceImpl implements TripService {
 		return pageable;
 	}
 
-	private List<TripParticipation> getTripUsers(Trip trip) {
+	private List<TripParticipation> getTripUsers(Trip tripRequest, Trip trip) {
 		List<TripParticipation> participations = new ArrayList<>();
-		for (TripParticipation tripParticipation : trip.getTripParticipations()) {
+		for (TripParticipation tripParticipation : tripRequest.getTripParticipations()) {
 			User user = userService.getUser(tripParticipation.getParticipant().getId());
 			if (user == null) {
 				throw new TripValidationException("Provided user does not exist");
@@ -94,20 +95,20 @@ public class TripServiceImpl implements TripService {
 			TripParticipation participation = new TripParticipation();
 			participation.setParticipant(user);
 			participation.setStatus(TripParticipationStatus.INVITED);
+			participation.setTrip(trip);
 			participations.add(participation);
 		}
 
 		return participations;
 	}
 
-//	private List<OfficeReservation> getOfficeReservations(Trip tripRequest) {
-//		List<OfficeReservation> reservations = new ArrayList<>();
-//		for (OfficeReservation officeReservation : tripRequest.getOfficeReservations()) {
-//
-//		}
-//
-//		return reservations;
-//	}
+	private List<OfficeReservation> createOfficeReservation(Trip trip) {
+		OfficeReservation officeReservation = new OfficeReservation();
+		officeReservation.setOffice(trip.getToOffice());
+		officeReservation.setReservedCapacity(trip.getTripParticipations().size());
+		officeReservation.setTrip(trip);
+		return Arrays.asList(officeReservation);
+	}
 
 	private Office getOffice(Office officeRequest) {
 		Office office = officeService.getOffice(officeRequest.getId());

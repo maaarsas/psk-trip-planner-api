@@ -2,7 +2,7 @@ package lt.vu.trip.config;
 
 import lombok.extern.slf4j.Slf4j;
 import lt.vu.trip.service.auth.jwt.InvalidJwtAuthenticationException;
-import lt.vu.trip.service.trip.TripValidationException;
+import lt.vu.trip.entity.exception.TripValidationException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

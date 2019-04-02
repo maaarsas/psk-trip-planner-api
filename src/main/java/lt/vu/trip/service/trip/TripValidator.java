@@ -2,6 +2,7 @@ package lt.vu.trip.service.trip;
 
 import lt.vu.trip.entity.Trip;
 import lt.vu.trip.entity.TripParticipation;
+import lt.vu.trip.entity.exception.TripValidationException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -36,7 +37,6 @@ public class TripValidator {
 				throw new TripValidationException("Participant must exist and have id");
 			}
 		}
-
 
 	}
 }

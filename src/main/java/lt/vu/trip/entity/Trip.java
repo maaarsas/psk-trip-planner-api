@@ -27,7 +27,7 @@ public class Trip {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User organizer;
 
-	@OneToMany(mappedBy = "trip")
+	@OneToMany(mappedBy = "trip", cascade = CascadeType.PERSIST)
 	@JsonManagedReference
 	private List<TripParticipation> tripParticipations = new ArrayList<>();
 
@@ -41,7 +41,8 @@ public class Trip {
 	@ManyToOne
 	private Office toOffice;
 
-	@OneToMany(mappedBy = "trip")
+	@OneToMany(mappedBy = "trip", cascade = CascadeType.PERSIST)
+	@JsonManagedReference
 	private List<OfficeReservation> officeReservations = new ArrayList<>();
 
 	// TODO: add office reservations

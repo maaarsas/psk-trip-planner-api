@@ -1,4 +1,4 @@
-package lt.vu.trip.service.trip;
+package lt.vu.trip.entity.exception;
 
 public class TripValidationException extends RuntimeException {
 
