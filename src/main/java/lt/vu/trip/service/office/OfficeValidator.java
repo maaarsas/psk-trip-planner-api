@@ -19,7 +19,7 @@ public class OfficeValidator {
 	}
 
 	public void validateOld(Office office) {
-		if (office.getMaxCapacity() > 1) {
+		if (office.getMaxCapacity() < 1) {
 			throw new OfficeValidationException("Capacity must be a positive integer");
 		}
 		if (StringUtils.isEmpty(office.getTitle()) || StringUtils.isEmpty(office.getTitle().trim())) {
