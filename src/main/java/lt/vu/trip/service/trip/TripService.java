@@ -12,5 +12,5 @@ public interface TripService {
 
 	Page<Trip> getCurrentUserInvitedIn(int page, int resultsPerPage, TripSearchCriteria criteria);
 
-	boolean createNew(Trip trip);
+	Trip create(Trip trip);
 }

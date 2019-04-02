@@ -1,9 +1,9 @@
 package lt.vu.trip.service.trip;
 
-import lt.vu.trip.entity.Trip;
-import lt.vu.trip.entity.TripParticipationStatus;
-import lt.vu.trip.entity.User;
+import lt.vu.trip.entity.*;
+import lt.vu.trip.entity.exception.TripValidationException;
 import lt.vu.trip.repository.TripRepository;
+import lt.vu.trip.service.office.OfficeService;
 import lt.vu.trip.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +11,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class TripServiceImpl implements TripService {
@@ -20,6 +24,12 @@ public class TripServiceImpl implements TripService {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private OfficeService officeService;
+
+	@Autowired
+	private TripValidator validator;
 
 	public Page<Trip> getAll(int page, int resultsPerPage, TripSearchCriteria criteria) {
 		return this.getList(page, resultsPerPage, criteria);
@@ -45,9 +55,22 @@ public class TripServiceImpl implements TripService {
 		return this.getList(page, resultsPerPage, criteria);
 	}
 
-	public boolean createNew(Trip trip) {
-		repo.saveAndFlush(trip);
-		return true;
+	public Trip create(Trip tripRequest) {
+		validator.validateTrip(tripRequest); // basic validation
+
+		Trip trip = new Trip();
+		trip.setTripParticipations(getTripUsers(tripRequest, trip)); // also validates users
+		trip.setOrganizer(userService.getCurrentUser());
+		trip.setStartDate(tripRequest.getStartDate());
+		trip.setEndDate(tripRequest.getEndDate());
+		trip.setFromOffice(getOffice(tripRequest.getFromOffice())); // also validates office
+		trip.setToOffice(getOffice(tripRequest.getToOffice())); // also validates office
+		trip.setAccomodationStatus(tripRequest.getAccomodationStatus());
+		trip.setCarRentalStatus(tripRequest.getCarRentalStatus());
+		trip.setFlightTicketStatus(tripRequest.getFlightTicketStatus());
+		trip.setOfficeReservations(createOfficeReservation(trip));
+
+		return repo.saveAndFlush(trip);
 	}
 
 	private Page<Trip> getList(int page, int resultsPerPage, TripSearchCriteria criteria) {
@@ -60,5 +83,39 @@ public class TripServiceImpl implements TripService {
 		// pages here are numbered from 0
 		Pageable pageable = PageRequest.of(page - 1, resultsPerPage, Sort.by("startDate").and(Sort.by("endDate")));
 		return pageable;
+	}
+
+	private List<TripParticipation> getTripUsers(Trip tripRequest, Trip trip) {
+		List<TripParticipation> participations = new ArrayList<>();
+		for (TripParticipation tripParticipation : tripRequest.getTripParticipations()) {
+			User user = userService.getUser(tripParticipation.getParticipant().getId());
+			if (user == null) {
+				throw new TripValidationException("Provided user does not exist");
+			}
+			TripParticipation participation = new TripParticipation();
+			participation.setParticipant(user);
+			participation.setStatus(TripParticipationStatus.INVITED);
+			participation.setTrip(trip);
+			participations.add(participation);
+		}
+
+		return participations;
+	}
+
+	private List<OfficeReservation> createOfficeReservation(Trip trip) {
+		OfficeReservation officeReservation = new OfficeReservation();
+		officeReservation.setOffice(trip.getToOffice());
+		officeReservation.setReservedCapacity(trip.getTripParticipations().size());
+		officeReservation.setTrip(trip);
+		return Arrays.asList(officeReservation);
+	}
+
+	private Office getOffice(Office officeRequest) {
+		Office office = officeService.getOffice(officeRequest.getId());
+		if (office == null) {
+			throw new TripValidationException("Office does not exist");
+		}
+
+		return office;
 	}
 }
