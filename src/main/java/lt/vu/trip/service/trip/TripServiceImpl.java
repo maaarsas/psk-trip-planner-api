@@ -2,6 +2,7 @@ package lt.vu.trip.service.trip;
 
 import lt.vu.trip.entity.*;
 import lt.vu.trip.entity.exception.TripValidationException;
+import lt.vu.trip.entity.response.ErrorType;
 import lt.vu.trip.repository.TripRepository;
 import lt.vu.trip.service.office.OfficeService;
 import lt.vu.trip.service.user.UserService;
@@ -90,7 +91,7 @@ public class TripServiceImpl implements TripService {
 		for (TripParticipation tripParticipation : tripRequest.getTripParticipations()) {
 			User user = userService.getUser(tripParticipation.getParticipant().getId());
 			if (user == null) {
-				throw new TripValidationException("Provided user does not exist");
+				throw new TripValidationException(ErrorType.TRIP_VALIDATION_PARTICIPANT_DOES_NOT_EXIST.toString());
 			}
 			TripParticipation participation = new TripParticipation();
 			participation.setParticipant(user);
@@ -112,8 +113,8 @@ public class TripServiceImpl implements TripService {
 
 	private Office getOffice(Office officeRequest) {
 		Office office = officeService.getOffice(officeRequest.getId());
-		if (office.getDeleted()) {
-			throw new TripValidationException("Office does not exist");
+		if (office == null || office.getDeleted()) {
+			throw new TripValidationException(ErrorType.TRIP_VALIDATION_OFFICE_DOES_NOT_EXIST.toString());
 		}
 
 		return office;

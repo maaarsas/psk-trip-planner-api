@@ -1,5 +1,6 @@
 package lt.vu.trip.service.auth.jwt;
 
+import lt.vu.trip.entity.response.ErrorType;
 import lt.vu.trip.repository.UserRepository;
 import lt.vu.trip.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class JwtAuthService implements AuthService {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 		String token = jwtTokenProvider.createToken(email,
 				users.findByUsername(email)
-						.orElseThrow(() -> new UsernameNotFoundException("Email " + email + "not found"))
+						.orElseThrow(() -> new UsernameNotFoundException(ErrorType.AUTHENTICATION_USERNAME_NOT_FOUND.toString()))
 						.getRoles()
 		);
 		return token;

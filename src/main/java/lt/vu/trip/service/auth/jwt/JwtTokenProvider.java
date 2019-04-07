@@ -1,6 +1,7 @@
 package lt.vu.trip.service.auth.jwt;
 
 import io.jsonwebtoken.*;
+import lt.vu.trip.entity.response.ErrorType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -70,7 +71,7 @@ public class JwtTokenProvider {
 			}
 			return true;
 		} catch (JwtException | IllegalArgumentException e) {
-			throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
+			throw new InvalidJwtAuthenticationException(ErrorType.AUTHENTICATION_INVALID_OR_EXPIRED_TOKEN.toString());
 		}
 	}
 }
