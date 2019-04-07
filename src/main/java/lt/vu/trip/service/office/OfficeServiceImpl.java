@@ -30,13 +30,16 @@ public class OfficeServiceImpl implements OfficeService {
 
 	@Override
 	public Office create(Office officeRequest) {
-		validator.validateNew(officeRequest);
-		return repository.saveAndFlush(officeRequest);
+		validator.validate(officeRequest);
+		Office office = new Office();
+		office.setTitle(officeRequest.getTitle());
+		office.setMaxCapacity(officeRequest.getMaxCapacity());
+		return repository.saveAndFlush(office);
 	}
 
 	@Override
 	public Office update(Office officeRequest) {
-		validator.validateOld(officeRequest);
+		validator.validate(officeRequest);
 
 		Office office = repository.findByIdAndDeletedFalse(officeRequest.getId());
 		if (office == null) {
