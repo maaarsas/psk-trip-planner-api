@@ -26,7 +26,7 @@ public class JwtAuthService implements AuthService {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 		String token = jwtTokenProvider.createToken(email,
 				users.findByUsername(email)
-						.orElseThrow(() -> new UsernameNotFoundException(ErrorType.AUTHENTICATION_USERNAME_NOT_FOUND.toString()))
+						.orElseThrow(() -> new UsernameNotFoundException(ErrorType.AUTHENTICATION_EMAIL_NOT_FOUND.toString()))
 						.getRoles()
 		);
 		return token;

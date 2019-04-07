@@ -89,7 +89,12 @@ public class TripServiceImpl implements TripService {
 	private List<TripParticipation> getTripUsers(Trip tripRequest, Trip trip) {
 		List<TripParticipation> participations = new ArrayList<>();
 		for (TripParticipation tripParticipation : tripRequest.getTripParticipations()) {
-			User user = userService.getUser(tripParticipation.getParticipant().getId());
+			User user;
+			try {
+				user = userService.getUser(tripParticipation.getParticipant().getId());
+			} catch (Exception e) {
+				throw new TripValidationException(ErrorType.TRIP_VALIDATION_PARTICIPANT_DOES_NOT_EXIST.toString());
+			}
 			if (user == null) {
 				throw new TripValidationException(ErrorType.TRIP_VALIDATION_PARTICIPANT_DOES_NOT_EXIST.toString());
 			}
@@ -112,8 +117,13 @@ public class TripServiceImpl implements TripService {
 	}
 
 	private Office getOffice(Office officeRequest) {
-		Office office = officeService.getOffice(officeRequest.getId());
-		if (office == null || office.getDeleted()) {
+		Office office;
+		try {
+			office = officeService.getOffice(officeRequest.getId());
+		} catch (Exception e) {
+			throw new TripValidationException(ErrorType.TRIP_VALIDATION_OFFICE_DOES_NOT_EXIST.toString());
+		}
+		if (office == null || office.isDeleted()) {
 			throw new TripValidationException(ErrorType.TRIP_VALIDATION_OFFICE_DOES_NOT_EXIST.toString());
 		}
 

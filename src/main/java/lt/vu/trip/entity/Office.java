@@ -26,7 +26,7 @@ public class Office {
 
 	private Integer maxCapacity;
 
-	private Boolean deleted;
+	private boolean deleted;
 
 	@OneToMany(mappedBy = "office")
 	private List<OfficeReservation> reservations = new ArrayList<>();
