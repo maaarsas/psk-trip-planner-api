@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "reservations"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "reservations", "deleted"})
 public class Office {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,8 @@ public class Office {
 	private String title;
 
 	private Integer maxCapacity;
+
+	private boolean deleted;
 
 	@OneToMany(mappedBy = "office")
 	private List<OfficeReservation> reservations = new ArrayList<>();
