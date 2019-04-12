@@ -45,7 +45,8 @@ public class Trip {
 	@JsonManagedReference
 	private List<OfficeReservation> officeReservations = new ArrayList<>();
 
-	// TODO: add office reservations
+	@Enumerated(EnumType.STRING)
+	private TripStatus status = TripStatus.ACTIVE;
 
 	@Enumerated(EnumType.STRING)
 	private TripTaskStatus flightTicketStatus;
