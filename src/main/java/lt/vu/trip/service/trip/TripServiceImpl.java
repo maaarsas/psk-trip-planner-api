@@ -112,7 +112,7 @@ public class TripServiceImpl implements TripService {
 
 	private Office getOffice(Office officeRequest) {
 		Office office = officeService.getOffice(officeRequest.getId());
-		if (office == null || office.isDeleted()) {
+		if (office.getDeleted()) {
 			throw new TripValidationException("Office does not exist");
 		}
 
