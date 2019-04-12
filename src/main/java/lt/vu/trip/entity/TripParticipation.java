@@ -2,6 +2,7 @@ package lt.vu.trip.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,10 +24,12 @@ public class TripParticipation {
 	@NotNull
 	@ManyToOne
 	@JsonBackReference
+	@JsonManagedReference
 	private Trip trip;
 
 	@NotNull
 	@ManyToOne
+	@JsonManagedReference
 	private User participant;
 
 	@Enumerated(EnumType.STRING)

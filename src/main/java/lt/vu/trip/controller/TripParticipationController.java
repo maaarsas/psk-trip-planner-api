@@ -1,5 +1,6 @@
 package lt.vu.trip.controller;
 
+import lt.vu.trip.entity.response.ErrorBodyResponse;
 import lt.vu.trip.service.tripparticipation.TripParticipationService;
 import lt.vu.trip.service.tripparticipation.TripParticipationStatusChangeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class TripParticipationController {
 			tripParticipationService.accept(tripParticipationId);
 			return new ResponseEntity(null, HttpStatus.OK);
 		} catch (TripParticipationStatusChangeException e) {
-			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new ErrorBodyResponse(e), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -33,7 +34,7 @@ public class TripParticipationController {
 			tripParticipationService.reject(tripParticipationId);
 			return new ResponseEntity(null, HttpStatus.OK);
 		} catch (TripParticipationStatusChangeException e) {
-			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new ErrorBodyResponse(e), HttpStatus.BAD_REQUEST);
 		}
 	}
 }
