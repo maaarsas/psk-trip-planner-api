@@ -1,6 +1,5 @@
 package lt.vu.trip.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -44,7 +43,6 @@ public class User implements UserDetails {
 
 	@OneToMany(mappedBy = "participant")
 	@JsonIgnore
-	@JsonBackReference
 	private List<TripParticipation> tripParticipations = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
