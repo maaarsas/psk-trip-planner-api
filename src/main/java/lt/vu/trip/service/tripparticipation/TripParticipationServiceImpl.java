@@ -50,7 +50,7 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 		if (tripParticipation.getStatus() != TripParticipationStatus.INVITED) {
 			return false;
 		}
-		if (!tripParticipation.getTrip().getStartDate().isBefore(LocalDate.now())) {
+		if (!tripParticipation.getTrip().getStartDate().isAfter(LocalDate.now())) {
 			return false;
 		}
 		return true;
