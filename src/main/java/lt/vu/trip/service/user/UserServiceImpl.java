@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 class UserServiceImpl implements UserService {
@@ -15,7 +16,9 @@ class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	public User getCurrentUser() {
-		return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Long currentUserId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+		Optional<User> user = userRepository.findById(currentUserId);
+		return user.get();
 	}
 
 	public List<User> searchUsers(String query) {

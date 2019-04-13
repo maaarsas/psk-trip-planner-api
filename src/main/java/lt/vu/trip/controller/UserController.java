@@ -23,4 +23,10 @@ public class UserController {
 		List<User> users = userService.searchUsers(query);
 		return ResponseEntity.ok(users);
 	}
+
+	@GetMapping("/me")
+	public ResponseEntity<User> getCurrentUser() {
+		User currentUser = userService.getCurrentUser();
+		return ResponseEntity.ok(currentUser);
+	}
 }
