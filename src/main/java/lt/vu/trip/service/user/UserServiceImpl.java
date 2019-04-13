@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,10 @@ class UserServiceImpl implements UserService {
 	}
 
 	public List<User> searchUsers(String query) {
+		if (query.isEmpty()) {
+			return new ArrayList<>();
+		}
+
 		String[] queryParts = query.trim().split(" ");
 		if (queryParts.length > 1) {
 			return userRepository.findTop10ByNameStartingWithIgnoreCaseAndSurnameStartingWithIgnoreCase(queryParts[0], queryParts[1]);
