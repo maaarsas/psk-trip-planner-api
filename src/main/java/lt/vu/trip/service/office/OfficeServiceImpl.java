@@ -1,6 +1,7 @@
 package lt.vu.trip.service.office;
 
 import lt.vu.trip.entity.Office;
+import lt.vu.trip.entity.response.ErrorType;
 import lt.vu.trip.repository.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -43,7 +44,7 @@ public class OfficeServiceImpl implements OfficeService {
 
 		Office office = repository.findByIdAndDeletedFalse(officeRequest.getId());
 		if (office == null) {
-			throw new ResourceNotFoundException("Office not found");
+			throw new ResourceNotFoundException(ErrorType.OFFICE_NOT_FOUND.toString());
 		}
 
 		office.setMaxCapacity(officeRequest.getMaxCapacity());
@@ -59,7 +60,7 @@ public class OfficeServiceImpl implements OfficeService {
 			office.get().setDeleted(true);
 			repository.saveAndFlush(office.get());
 		} else {
-			throw new ResourceNotFoundException("Office does not exist");
+			throw new ResourceNotFoundException(ErrorType.OFFICE_NOT_FOUND.toString());
 		}
 	}
 }

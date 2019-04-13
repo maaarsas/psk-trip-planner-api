@@ -1,6 +1,9 @@
 package lt.vu.trip.service.auth.jwt;
 
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import lt.vu.trip.entity.response.ErrorResponse;
+import lt.vu.trip.entity.response.ErrorType;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +21,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 	private JwtTokenProvider jwtTokenProvider;
 
+	private Gson gson = new Gson();
+
 	public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
@@ -33,19 +38,25 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 		} catch (InvalidJwtAuthenticationException e) {
 			log.debug("InvalidJwtAuthenticationException: " + e.getMessage());
-			sendError(response, "Invalid or expired token");
+			sendError(response, ErrorType.AUTHENTICATION_INVALID_OR_EXPIRED_TOKEN);
 		} catch (AuthenticationException e) {
 			log.debug("AuthenticationException: " + e.getMessage());
-			sendError(response, "Authentication failure");
+			sendError(response, ErrorType.AUTHENTICATION_ERROR);
 		} catch (RuntimeException e) {
 			log.debug("RuntimeException: " + e.getMessage());
-			sendError(response, "Error during authentication");
+			sendError(response, ErrorType.AUTHENTICATION_ERROR);
 		}
 	}
 
-	private void sendError(HttpServletResponse response, String message) throws IOException {
+	private void sendError(HttpServletResponse response, ErrorType error) throws IOException {
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
-		response.getWriter().write(message);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+
+		ErrorResponse errorResponse = new ErrorResponse(error);
+		String errorResponseBody = this.gson.toJson(errorResponse);
+
+		response.getWriter().write(errorResponseBody);
 		response.getWriter().flush();
 		response.getWriter().close();
 	}

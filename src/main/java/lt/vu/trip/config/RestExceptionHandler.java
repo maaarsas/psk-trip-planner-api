@@ -3,6 +3,8 @@ package lt.vu.trip.config;
 import lombok.extern.slf4j.Slf4j;
 import lt.vu.trip.entity.exception.OfficeValidationException;
 import lt.vu.trip.entity.exception.TripValidationException;
+import lt.vu.trip.entity.response.ErrorResponse;
+import lt.vu.trip.entity.response.ErrorType;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -20,27 +22,35 @@ public class RestExceptionHandler {
 	public ResponseEntity constraintViolation(ConstraintViolationException ex, WebRequest request) {
 		log.debug("handling ConstraintViolationException...");
 		return new ResponseEntity<>(
-				"Bad input data, more info: " + ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
+				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 
 	@ExceptionHandler({TripValidationException.class})
 	public ResponseEntity tripValidation(TripValidationException ex, WebRequest request) {
 		log.debug("handling TripValidationException...");
 		return new ResponseEntity<>(
-				"Bad trip input data: " + ex.getMessage(), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
 	}
 
 	@ExceptionHandler({OfficeValidationException.class})
 	public ResponseEntity officeValidation(OfficeValidationException ex, WebRequest request) {
 		log.debug("handling OfficeValidationException...");
 		return new ResponseEntity<>(
-				"Bad office input data: " + ex.getMessage(), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
 	}
 
 	@ExceptionHandler({ResourceNotFoundException.class})
 	public ResponseEntity notFound(ResourceNotFoundException ex, WebRequest request) {
 		log.debug("handling ResourceNotFoundException...");
 		return new ResponseEntity<>(
-				"Not found: " + ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
+				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
+
+	private ErrorResponse createError(String errorMessage) {
+		try {
+			return new ErrorResponse(ErrorType.valueOf(errorMessage));
+		} catch (Exception e) {
+			return new ErrorResponse(ErrorType.BE_FAILURE);
+		}
 	}
 }
