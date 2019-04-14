@@ -2,7 +2,7 @@ package lt.vu.trip.service.trip;
 
 import lt.vu.trip.entity.Trip;
 import lt.vu.trip.entity.TripParticipation;
-import lt.vu.trip.entity.User;
+import lt.vu.trip.entity.user.User;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;

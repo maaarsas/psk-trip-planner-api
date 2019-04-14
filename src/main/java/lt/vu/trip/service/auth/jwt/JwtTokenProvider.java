@@ -2,6 +2,7 @@ package lt.vu.trip.service.auth.jwt;
 
 import io.jsonwebtoken.*;
 import lt.vu.trip.entity.response.ErrorType;
+import lt.vu.trip.entity.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,7 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 
-	public String createToken(String email, List<String> roles) {
+	public String createToken(String email, List<Role> roles) {
 		Claims claims = Jwts.claims().setSubject(email);
 		claims.put("roles", roles);
 		Date now = new Date();

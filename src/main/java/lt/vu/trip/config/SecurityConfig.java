@@ -1,10 +1,12 @@
 package lt.vu.trip.config;
 
+import lt.vu.trip.entity.user.Role;
 import lt.vu.trip.service.auth.jwt.JwtConfigurer;
 import lt.vu.trip.service.auth.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -37,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.authorizeRequests()
 			.antMatchers("/auth/login").permitAll()
-			.antMatchers("/demo/register").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.cors()

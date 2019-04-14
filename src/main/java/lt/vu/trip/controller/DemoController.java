@@ -1,12 +1,14 @@
 package lt.vu.trip.controller;
 
-import lt.vu.trip.entity.User;
+import lt.vu.trip.entity.user.Role;
+import lt.vu.trip.entity.user.User;
 import lt.vu.trip.entity.request.AuthenticationRequest;
 import lt.vu.trip.entity.response.LoginResponse;
 import lt.vu.trip.repository.UserRepository;
 import lt.vu.trip.service.auth.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,12 +37,7 @@ public class DemoController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-
-	@GetMapping("")
-	public String all() {
-		return "{\"success\":1}";
-	}
-
+//	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"}) // removed for ease of development
 	@PostMapping("/register")
 	public ResponseEntity register(@RequestBody AuthenticationRequest data) {
 		String email = data.getEmail();
@@ -48,7 +45,7 @@ public class DemoController {
 		User newUser = User.builder()
 				.username(email)
 				.password(passwordEncoder.encode(password))
-				.roles(Arrays.asList("ROLE_USER"))
+				.roles(Arrays.asList(Role.USER))
 				.build();
 		users.save(newUser);
 

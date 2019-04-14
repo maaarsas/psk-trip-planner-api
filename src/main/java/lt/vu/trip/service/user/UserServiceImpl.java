@@ -1,6 +1,6 @@
 package lt.vu.trip.service.user;
 
-import lt.vu.trip.entity.User;
+import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

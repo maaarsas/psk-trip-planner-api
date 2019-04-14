@@ -8,10 +8,12 @@ import lt.vu.trip.service.trip.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Secured("ROLE_USER")
 @RestController
 @RequestMapping("/trip")
 public class TripController {
@@ -45,6 +47,7 @@ public class TripController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
 	@GetMapping("/organized")
 	public ResponseEntity<TripListResponse> getOrganized(@Valid TripRequestParams requestParams) {
 		TripSearchCriteria criteria = buildSearchCriteriaFromRequest(requestParams);
@@ -53,6 +56,7 @@ public class TripController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
 	@PostMapping("")
 	public ResponseEntity<Trip> createTrip(@RequestBody Trip trip) {
 		return ResponseEntity.ok(tripService.create(trip));

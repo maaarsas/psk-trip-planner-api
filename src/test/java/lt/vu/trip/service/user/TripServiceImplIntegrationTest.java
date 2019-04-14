@@ -3,7 +3,7 @@ package lt.vu.trip.service.user;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import lt.vu.trip.entity.Trip;
-import lt.vu.trip.entity.User;
+import lt.vu.trip.entity.user.User;
 import lt.vu.trip.service.trip.TripSearchCriteria;
 import lt.vu.trip.service.trip.TripService;
 import lt.vu.trip.service.trip.TripServiceImpl;

@@ -4,10 +4,12 @@ import lt.vu.trip.entity.Office;
 import lt.vu.trip.service.office.OfficeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Secured("ROLE_USER")
 @RestController
 @RequestMapping("/office")
 public class OfficeController {
@@ -20,16 +22,19 @@ public class OfficeController {
 		return ResponseEntity.ok(service.getAll());
 	}
 
+	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
 	@PostMapping("")
 	public ResponseEntity<Office> create(@RequestBody Office office) {
 		return ResponseEntity.ok(service.create(office));
 	}
 
+	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
 	@PutMapping("")
 	public ResponseEntity<Office> update(@RequestBody Office office) {
 		return ResponseEntity.ok(service.update(office));
 	}
 
+	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
 	@DeleteMapping("")
 	public void delete(Long id) {
 		service.delete(id);

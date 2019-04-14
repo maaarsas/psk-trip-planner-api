@@ -3,6 +3,7 @@ package lt.vu.trip.service.trip;
 import lt.vu.trip.entity.*;
 import lt.vu.trip.entity.exception.TripValidationException;
 import lt.vu.trip.entity.response.ErrorType;
+import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.TripRepository;
 import lt.vu.trip.service.office.OfficeService;
 import lt.vu.trip.service.user.UserService;

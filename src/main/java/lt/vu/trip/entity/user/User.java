@@ -1,4 +1,4 @@
-package lt.vu.trip.entity;
+package lt.vu.trip.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lt.vu.trip.entity.TripParticipation;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -48,12 +49,12 @@ public class User implements UserDetails {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
 	@JsonIgnore
-	private List<String> roles = new ArrayList<>();
+	private List<Role> roles = new ArrayList<>();
 
 	@Override
 	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role.value())).collect(Collectors.toList());
 	}
 
 	@Override

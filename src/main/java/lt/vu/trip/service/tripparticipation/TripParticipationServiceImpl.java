@@ -2,7 +2,7 @@ package lt.vu.trip.service.tripparticipation;
 
 import lt.vu.trip.entity.TripParticipation;
 import lt.vu.trip.entity.TripParticipationStatus;
-import lt.vu.trip.entity.User;
+import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.TripParticipationRepository;
 import lt.vu.trip.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
