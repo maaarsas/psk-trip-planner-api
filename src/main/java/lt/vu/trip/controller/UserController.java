@@ -1,5 +1,6 @@
 package lt.vu.trip.controller;
 
+import lt.vu.trip.entity.response.UserResponse;
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class UserController {
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<User> getCurrentUser() {
-		User currentUser = userService.getCurrentUser();
-		return ResponseEntity.ok(currentUser);
+	public ResponseEntity<UserResponse> getCurrentUser() {
+		User user = userService.getCurrentUser();
+		return ResponseEntity.ok(new UserResponse(user.getId(), user.getName(), user.getSurname(), user.getRoles()));
 	}
 }

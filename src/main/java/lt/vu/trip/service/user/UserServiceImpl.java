@@ -19,7 +19,7 @@ class UserServiceImpl implements UserService {
 	public User getCurrentUser() {
 		Long currentUserId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 		Optional<User> user = userRepository.findById(currentUserId);
-		return user.get();
+		return user.orElse(null);
 	}
 
 	public List<User> searchUsers(String query) {
@@ -36,7 +36,8 @@ class UserServiceImpl implements UserService {
 	}
 
 	public User getUser(Long id) {
-		return userRepository.findById(id).get();
+		Optional<User> user = userRepository.findById(id);
+		return user.orElse(null);
 	}
 
 }
