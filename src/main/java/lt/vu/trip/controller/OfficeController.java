@@ -30,8 +30,8 @@ public class OfficeController {
 		return ResponseEntity.ok(service.update(office));
 	}
 
-	@DeleteMapping("")
-	public void delete(Long id) {
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable Long id) {
 		service.delete(id);
 	}
 }
