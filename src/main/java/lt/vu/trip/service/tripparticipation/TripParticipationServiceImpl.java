@@ -35,19 +35,25 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 			throw new ResourceNotFoundException();
 		}
 		TripParticipation tripParticipation = optTripParticipation.get();
-		if (!canCurrentUserChangeTripParticipationStatus(tripParticipation)) {
+		if (!canCurrentUserChangeTripParticipationStatus(tripParticipation, newStatus)) {
 			throw new TripParticipationStatusChangeException();
 		}
 		tripParticipation.setStatus(newStatus);
 		repo.saveAndFlush(tripParticipation);
 	}
 
-	private boolean canCurrentUserChangeTripParticipationStatus(TripParticipation tripParticipation) {
+	private boolean canCurrentUserChangeTripParticipationStatus(TripParticipation tripParticipation, TripParticipationStatus newStatus) {
 		User currentUser = this.userService.getCurrentUser();
 		if (tripParticipation.getParticipant().getId() != currentUser.getId()) {
 			return false;
 		}
-		if (tripParticipation.getStatus() != TripParticipationStatus.INVITED) {
+		if (newStatus == TripParticipationStatus.ACCEPTED
+				&& tripParticipation.getStatus() != TripParticipationStatus.INVITED) {
+			return false;
+		}
+		if (newStatus == TripParticipationStatus.REJECTED
+			&& (tripParticipation.getStatus() != TripParticipationStatus.INVITED
+				|| tripParticipation.getStatus() != TripParticipationStatus.ACCEPTED)) {
 			return false;
 		}
 		if (!tripParticipation.getTrip().getStartDate().isAfter(LocalDate.now())) {
