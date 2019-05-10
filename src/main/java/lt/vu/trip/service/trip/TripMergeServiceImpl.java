@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -39,6 +40,11 @@ public class TripMergeServiceImpl implements TripMergeService {
 
 	public Trip mergeTrips(Long toTripId, Long mergeableTripId) {
 		Trip toTrip = tripRepository.findById(toTripId).orElseThrow(ResourceNotFoundException::new);
+
+		if (toTrip.getStartDate().isBefore(LocalDate.now())) {
+			throw new TripMergeException(ErrorType.TRIP_MERGE_NOT_MERGEABLE.toString());
+		}
+
 		Trip mergeableTrip = tripRepository.findById(mergeableTripId).orElseThrow(ResourceNotFoundException::new);
 		List<Trip> mergeableTrips = getTripsMergeableToTrip(toTrip.getId());
 
@@ -47,10 +53,16 @@ public class TripMergeServiceImpl implements TripMergeService {
 		}
 		// move all trip participations to another trip
 		for (TripParticipation tripParticipation : mergeableTrip.getTripParticipations()) {
+			// a trip cannot have more than 1 participation for the same user, so duplicates are eliminated
+			if (toTrip.getTripParticipations().stream().anyMatch(
+					p -> p.getParticipant().getId().equals(tripParticipation.getParticipant().getId())
+			)) {
+				continue;
+			}
 			tripParticipation.setTrip(toTrip);
+			toTrip.getTripParticipations().add(tripParticipation);
 			tripParticipationRepository.save(tripParticipation);
 		}
-		mergeableTrip.getTripParticipations().clear();
 		tripRepository.delete(mergeableTrip);
 		return toTrip;
 	}
