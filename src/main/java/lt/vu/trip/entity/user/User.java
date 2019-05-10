@@ -49,6 +49,7 @@ public class User implements UserDetails {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
 	@JsonIgnore
+	@Enumerated(EnumType.STRING)
 	private List<Role> roles = new ArrayList<>();
 
 	@Override

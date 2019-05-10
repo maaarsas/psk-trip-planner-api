@@ -22,19 +22,19 @@ public class OfficeController {
 		return ResponseEntity.ok(service.getAll());
 	}
 
-	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
+	@Secured({"ROLE_ADMINISTRATOR"})
 	@PostMapping("")
 	public ResponseEntity<Office> create(@RequestBody Office office) {
 		return ResponseEntity.ok(service.create(office));
 	}
 
-	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
+	@Secured({"ROLE_ADMINISTRATOR"})
 	@PutMapping("")
 	public ResponseEntity<Office> update(@RequestBody Office office) {
 		return ResponseEntity.ok(service.update(office));
 	}
 
-	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
+	@Secured({"ROLE_ADMINISTRATOR"})
 	@DeleteMapping("")
 	public void delete(Long id) {
 		service.delete(id);
