@@ -28,11 +28,12 @@ public class TripMergeServiceImpl implements TripMergeService {
 				.toOfficeId(toTrip.getToOffice().getId())
 				.startDateFrom(toTrip.getStartDate().minusDays(1)) // + - 1 day
 				.startDateTo(toTrip.getStartDate().plusDays(1))
-				.endDateFrom(toTrip.getStartDate().minusDays(1))
-				.endDateTo(toTrip.getStartDate().plusDays(1))
+				.endDateFrom(toTrip.getEndDate().minusDays(1))
+				.endDateTo(toTrip.getEndDate().plusDays(1))
 				.build();
 
 		List<Trip> mergeableTrips = tripRepository.findAll(TripSpecifications.findByCriteria(criteria));
+		mergeableTrips.removeIf(trip -> trip.getId().equals(toTrip.getId()));
 		return mergeableTrips;
 	}
 
@@ -41,10 +42,10 @@ public class TripMergeServiceImpl implements TripMergeService {
 		Trip mergeableTrip = tripRepository.findById(mergeableTripId).orElseThrow(ResourceNotFoundException::new);
 		List<Trip> mergeableTrips = getTripsMergeableToTrip(toTrip.getId());
 
-		if (!mergeableTrips.stream().anyMatch(trip -> trip.getId() == mergeableTrip.getId())) {
+		if (mergeableTrips.stream().noneMatch(trip -> trip.getId().equals(mergeableTrip.getId()))) {
 			throw new TripMergeException(ErrorType.TRIP_MERGE_NOT_MERGEABLE.toString());
 		}
-		// move all trip participations
+		// move all trip participations to another trip
 		for (TripParticipation tripParticipation : mergeableTrip.getTripParticipations()) {
 			tripParticipation.setTrip(toTrip);
 			tripParticipationRepository.save(tripParticipation);
