@@ -50,6 +50,7 @@ public class TripMergeServiceImpl implements TripMergeService {
 			tripParticipation.setTrip(toTrip);
 			tripParticipationRepository.save(tripParticipation);
 		}
+		mergeableTrip.getTripParticipations().clear();
 		tripRepository.delete(mergeableTrip);
 		return toTrip;
 	}
