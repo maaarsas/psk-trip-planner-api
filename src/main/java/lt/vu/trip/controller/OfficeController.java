@@ -35,8 +35,8 @@ public class OfficeController {
 	}
 
 	@Secured({"ROLE_ADMINISTRATOR"})
-	@DeleteMapping("")
-	public void delete(Long id) {
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable Long id) {
 		service.delete(id);
 	}
 }
