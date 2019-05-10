@@ -53,7 +53,7 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 		}
 		if (newStatus == TripParticipationStatus.REJECTED
 			&& (tripParticipation.getStatus() != TripParticipationStatus.INVITED
-				|| tripParticipation.getStatus() != TripParticipationStatus.ACCEPTED)) {
+				&& tripParticipation.getStatus() != TripParticipationStatus.ACCEPTED)) {
 			return false;
 		}
 		if (!tripParticipation.getTrip().getStartDate().isAfter(LocalDate.now())) {
