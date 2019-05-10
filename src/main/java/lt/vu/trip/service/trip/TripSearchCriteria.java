@@ -27,4 +27,8 @@ public class TripSearchCriteria {
 	private Long participantId;
 
 	private TripParticipationStatus participationStatus;
+
+	private Long fromOfficeId;
+
+	private Long toOfficeId;
 }
