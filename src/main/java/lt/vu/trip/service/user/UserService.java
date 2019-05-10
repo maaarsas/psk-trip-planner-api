@@ -1,6 +1,6 @@
 package lt.vu.trip.service.user;
 
-import lt.vu.trip.entity.User;
+import lt.vu.trip.entity.user.User;
 
 import java.util.List;
 

@@ -3,6 +3,7 @@ package lt.vu.trip.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import lt.vu.trip.entity.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
