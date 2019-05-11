@@ -70,7 +70,21 @@ class UserServiceImpl implements UserService {
 			throw new ResourceNotFoundException();
 		}
 
-		existingUser.setRoles(user.getRoles());
+		List<Role> roles = new ArrayList<>();
+
+		switch (user.getRoles().get(0)) {
+			case USER:
+				roles = user.getRoles();
+				break;
+			case ADMINISTRATOR:
+				roles = Arrays.asList(Role.USER, Role.ORGANIZER, Role.ADMINISTRATOR);
+				break;
+			case ORGANIZER:
+				roles = Arrays.asList(Role.USER, Role.ADMINISTRATOR);
+			default: roles = Arrays.asList(Role.USER);
+		}
+
+		existingUser.setRoles(roles);
 
 		return userRepository.saveAndFlush(existingUser);
 	}
