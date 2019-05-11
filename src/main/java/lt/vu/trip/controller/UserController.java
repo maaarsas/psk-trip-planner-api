@@ -9,7 +9,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +48,7 @@ public class UserController {
 	public ResponseEntity<UserResponse> create(@RequestBody User user) {
 		User createdUser = userService.create(user);
 		return ResponseEntity.ok(new UserResponse(createdUser.getId(), createdUser.getName(),
-			createdUser.getSurname(), createdUser.getRoles()));
+				createdUser.getSurname(), createdUser.getRoles()));
 	}
 
 	@Secured("ROLE_ADMINISTRATOR")
@@ -57,7 +56,7 @@ public class UserController {
 	public ResponseEntity<UserResponse> updateUserRoles(@RequestBody User user) {
 		User createdUser = userService.updateUserRoles(user);
 		return ResponseEntity.ok(new UserResponse(createdUser.getId(), createdUser.getName(),
-			createdUser.getSurname(), createdUser.getRoles()));
+				createdUser.getSurname(), createdUser.getRoles()));
 	}
 
 	@Secured("ROLE_ADMINISTRATOR")
