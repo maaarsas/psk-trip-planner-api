@@ -1,12 +1,16 @@
 package lt.vu.trip.service.user;
 
+import lt.vu.trip.entity.user.Role;
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +19,12 @@ class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private UserValidator validator;
 
 	public User getCurrentUser() {
 		Long currentUserId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -40,4 +50,53 @@ class UserServiceImpl implements UserService {
 		return user.orElse(null);
 	}
 
+	public List<User> getAll() {
+		return userRepository.findAll();
+	}
+
+	public User create(User user) {
+		validator.validate(user);
+		User newUser = User.builder()
+			.username(user.getUsername())
+			.password(passwordEncoder.encode(user.getPassword()))
+			.surname(user.getSurname())
+			.name(user.getName())
+			.roles((user.getRoles() == null || user.getRoles().isEmpty()) ? Arrays.asList(Role.USER) : user.getRoles())
+			.build();
+		userRepository.save(newUser);
+
+		return newUser;
+	}
+
+	public User updateUserRoles(User user) {
+		User existingUser = userRepository.findById(user.getId()).orElse(null);
+		if (existingUser == null) {
+			throw new ResourceNotFoundException();
+		}
+
+		List<Role> roles = new ArrayList<>();
+
+		switch (user.getRoles().get(0)) {
+			case USER:
+				roles = user.getRoles();
+				break;
+			case ORGANIZER:
+				roles = Arrays.asList(Role.USER, Role.ORGANIZER);
+				break;
+			case ADMINISTRATOR:
+				roles = Arrays.asList(Role.USER, Role.ORGANIZER, Role.ADMINISTRATOR);
+				break;
+			default:
+				roles = Arrays.asList(Role.USER);
+		}
+
+		existingUser.setRoles(roles);
+
+		return userRepository.saveAndFlush(existingUser);
+	}
+
+	public void delete(Long id) {
+		Optional<User> user = userRepository.findById(id);
+		user.ifPresent(value -> userRepository.delete(value));
+	}
 }
