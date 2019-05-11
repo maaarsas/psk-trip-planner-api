@@ -17,4 +17,6 @@ public interface UserService {
 	User updateUserRoles(User user);
 
 	void delete(Long id);
+
+	List<User> getAll();
 }

@@ -50,6 +50,10 @@ class UserServiceImpl implements UserService {
 		return user.orElse(null);
 	}
 
+	public List<User> getAll() {
+		return userRepository.findAll();
+	}
+
 	public User create(User user) {
 		validator.validate(user);
 		User newUser = User.builder()

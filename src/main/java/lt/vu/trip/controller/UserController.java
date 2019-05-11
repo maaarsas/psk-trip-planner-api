@@ -9,7 +9,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Secured("ROLE_USER")
 @RestController
@@ -29,6 +31,17 @@ public class UserController {
 	public ResponseEntity<UserResponse> getCurrentUser() {
 		User user = userService.getCurrentUser();
 		return ResponseEntity.ok(new UserResponse(user.getId(), user.getName(), user.getSurname(), user.getRoles()));
+	}
+
+	@Secured("ROLE_ADMINISTRATOR")
+	@GetMapping("")
+	public ResponseEntity<List<UserResponse>> getAll() {
+		List<User> users = userService.getAll();
+		List<UserResponse> userResponses = users.stream()
+				.map(user -> new UserResponse(user.getId(), user.getName(), user.getSurname(), user.getRoles()))
+				.collect(Collectors.toList());
+
+		return ResponseEntity.ok(userResponses);
 	}
 
 	@Secured("ROLE_ADMINISTRATOR")
