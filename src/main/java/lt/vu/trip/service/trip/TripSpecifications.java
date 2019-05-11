@@ -1,5 +1,6 @@
 package lt.vu.trip.service.trip;
 
+import lt.vu.trip.entity.Office;
 import lt.vu.trip.entity.Trip;
 import lt.vu.trip.entity.TripParticipation;
 import lt.vu.trip.entity.user.User;
@@ -34,6 +35,14 @@ public class TripSpecifications {
 				if (searchCriteria.getOrganizerId() != null) {
 					final Join<Trip, User> organizer = trip.join("organizer");
 					predicates.add(cb.equal(organizer.<Long>get("id"), searchCriteria.getOrganizerId()));
+				}
+				if (searchCriteria.getFromOfficeId() != null) {
+					final Join<Trip, Office> fromOffice = trip.join("fromOffice");
+					predicates.add(cb.equal(fromOffice.<Long>get("id"), searchCriteria.getFromOfficeId()));
+				}
+				if (searchCriteria.getToOfficeId() != null) {
+					final Join<Trip, Office> toOffice = trip.join("toOffice");
+					predicates.add(cb.equal(toOffice.<Long>get("id"), searchCriteria.getToOfficeId()));
 				}
 				if (searchCriteria.getParticipantId() != null) {
 					final Join<Trip, TripParticipation> participation = trip.join("tripParticipations");

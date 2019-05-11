@@ -5,6 +5,7 @@ import lt.vu.trip.entity.exception.OfficeValidationException;
 import lt.vu.trip.entity.exception.TripValidationException;
 import lt.vu.trip.entity.response.ErrorResponse;
 import lt.vu.trip.entity.response.ErrorType;
+import lt.vu.trip.service.trip.TripMergeException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -35,6 +36,13 @@ public class RestExceptionHandler {
 	@ExceptionHandler({OfficeValidationException.class})
 	public ResponseEntity officeValidation(OfficeValidationException ex, WebRequest request) {
 		log.debug("handling OfficeValidationException...");
+		return new ResponseEntity<>(
+				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+	}
+
+	@ExceptionHandler({TripMergeException.class})
+	public ResponseEntity tripMerge(TripMergeException ex, WebRequest request) {
+		log.debug("handling TripMergeException...");
 		return new ResponseEntity<>(
 				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
 	}

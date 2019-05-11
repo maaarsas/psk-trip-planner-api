@@ -28,7 +28,7 @@ public class Trip {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User organizer;
 
-	@OneToMany(mappedBy = "trip", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "trip", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	@JsonManagedReference
 	private List<TripParticipation> tripParticipations = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class Trip {
 	@ManyToOne
 	private Office toOffice;
 
-	@OneToMany(mappedBy = "trip", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "trip", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	@JsonManagedReference
 	private List<OfficeReservation> officeReservations = new ArrayList<>();
 
