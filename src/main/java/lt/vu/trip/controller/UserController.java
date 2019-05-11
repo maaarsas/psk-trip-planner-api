@@ -40,10 +40,17 @@ public class UserController {
 	}
 
 	@Secured("ROLE_ADMINISTRATOR")
-	@PutMapping("")
+	@PutMapping("/roles")
 	public ResponseEntity<UserResponse> updateUserRoles(@RequestBody User user) {
 		User createdUser = userService.updateUserRoles(user);
 		return ResponseEntity.ok(new UserResponse(createdUser.getId(), createdUser.getName(),
 			createdUser.getSurname(), createdUser.getRoles()));
 	}
+
+	@Secured("ROLE_ADMINISTRATOR")
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable Long id) {
+		userService.delete(id);
+	}
+
 }

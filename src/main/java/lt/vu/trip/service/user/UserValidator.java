@@ -15,5 +15,11 @@ public class UserValidator {
 		if (user.getPassword() == null || user.getPassword().trim().equals("")) {
 			throw new UserValidationException(ErrorType.USER_PASSWORD.toString());
 		}
+		if (user.getName() == null || user.getName().trim().equals("")) {
+			throw new UserValidationException(ErrorType.USER_NAME.toString());
+		}
+		if (user.getSurname() == null || user.getSurname().trim().equals("")) {
+			throw new UserValidationException(ErrorType.USER_SURNAME.toString());
+		}
 	}
 }

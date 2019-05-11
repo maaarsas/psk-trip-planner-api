@@ -15,4 +15,6 @@ public interface UserService {
 	User create(User user);
 
 	User updateUserRoles(User user);
+
+	void delete(Long id);
 }

@@ -1,5 +1,6 @@
 package lt.vu.trip.service.user;
 
+import lt.vu.trip.entity.user.Role;
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.UserRepository;
 import lt.vu.trip.service.auth.jwt.JwtTokenProvider;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +57,9 @@ class UserServiceImpl implements UserService {
 		User newUser = User.builder()
 			.username(user.getUsername())
 			.password(passwordEncoder.encode(user.getPassword()))
-			.roles(user.getRoles())
+			.surname(user.getSurname())
+			.name(user.getName())
+			.roles((user.getRoles() == null || user.getRoles().isEmpty()) ? Arrays.asList(Role.USER) : user.getRoles())
 			.build();
 		userRepository.save(newUser);
 
@@ -71,5 +75,10 @@ class UserServiceImpl implements UserService {
 		existingUser.setRoles(user.getRoles());
 
 		return userRepository.saveAndFlush(existingUser);
+	}
+	
+	public void delete(Long id) {
+		Optional<User> user = userRepository.findById(id);
+		user.ifPresent(value -> userRepository.delete(value));
 	}
 }
