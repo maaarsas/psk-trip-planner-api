@@ -3,10 +3,8 @@ package lt.vu.trip.service.user;
 import lt.vu.trip.entity.user.Role;
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.UserRepository;
-import lt.vu.trip.service.auth.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -76,7 +74,7 @@ class UserServiceImpl implements UserService {
 
 		return userRepository.saveAndFlush(existingUser);
 	}
-	
+
 	public void delete(Long id) {
 		Optional<User> user = userRepository.findById(id);
 		user.ifPresent(value -> userRepository.delete(value));

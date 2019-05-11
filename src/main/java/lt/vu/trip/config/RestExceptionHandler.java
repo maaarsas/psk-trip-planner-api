@@ -24,21 +24,21 @@ public class RestExceptionHandler {
 	public ResponseEntity constraintViolation(ConstraintViolationException ex, WebRequest request) {
 		log.debug("handling ConstraintViolationException...");
 		return new ResponseEntity<>(
-				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.CONFLICT);
+			createError(ex.getMessage()), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 
 	@ExceptionHandler({TripValidationException.class})
 	public ResponseEntity tripValidation(TripValidationException ex, WebRequest request) {
 		log.debug("handling TripValidationException...");
 		return new ResponseEntity<>(
-				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+			createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
 	}
 
 	@ExceptionHandler({OfficeValidationException.class})
 	public ResponseEntity officeValidation(OfficeValidationException ex, WebRequest request) {
 		log.debug("handling OfficeValidationException...");
 		return new ResponseEntity<>(
-				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+			createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
 	}
 
 	@ExceptionHandler({TripMergeException.class})
@@ -47,6 +47,7 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(
 			createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
 	}
+
 	@ExceptionHandler({UserValidationException.class})
 	public ResponseEntity userValidation(UserValidationException ex, WebRequest request) {
 		log.debug("handling UserValidationException...");
@@ -58,7 +59,7 @@ public class RestExceptionHandler {
 	public ResponseEntity notFound(ResourceNotFoundException ex, WebRequest request) {
 		log.debug("handling ResourceNotFoundException...");
 		return new ResponseEntity<>(
-				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND);
+			createError(ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 
 	private ErrorResponse createError(String errorMessage) {
