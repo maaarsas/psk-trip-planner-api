@@ -76,12 +76,14 @@ class UserServiceImpl implements UserService {
 			case USER:
 				roles = user.getRoles();
 				break;
+			case ORGANIZER:
+				roles = Arrays.asList(Role.USER, Role.ORGANIZER);
+				break;
 			case ADMINISTRATOR:
 				roles = Arrays.asList(Role.USER, Role.ORGANIZER, Role.ADMINISTRATOR);
 				break;
-			case ORGANIZER:
-				roles = Arrays.asList(Role.USER, Role.ADMINISTRATOR);
-			default: roles = Arrays.asList(Role.USER);
+			default:
+				roles = Arrays.asList(Role.USER);
 		}
 
 		existingUser.setRoles(roles);
