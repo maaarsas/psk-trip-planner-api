@@ -2,8 +2,12 @@ package lt.vu.trip.service.user;
 
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.UserRepository;
+import lt.vu.trip.service.auth.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,6 +19,12 @@ class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private UserValidator validator;
 
 	public User getCurrentUser() {
 		Long currentUserId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -40,4 +50,26 @@ class UserServiceImpl implements UserService {
 		return user.orElse(null);
 	}
 
+	public User create(User user) {
+		validator.validate(user);
+		User newUser = User.builder()
+			.username(user.getUsername())
+			.password(passwordEncoder.encode(user.getPassword()))
+			.roles(user.getRoles())
+			.build();
+		userRepository.save(newUser);
+
+		return newUser;
+	}
+
+	public User updateUserRoles(User user) {
+		User existingUser = userRepository.findById(user.getId()).orElse(null);
+		if (existingUser == null) {
+			throw new ResourceNotFoundException();
+		}
+
+		existingUser.setRoles(user.getRoles());
+
+		return userRepository.saveAndFlush(existingUser);
+	}
 }

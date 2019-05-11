@@ -3,6 +3,7 @@ package lt.vu.trip.config;
 import lombok.extern.slf4j.Slf4j;
 import lt.vu.trip.entity.exception.OfficeValidationException;
 import lt.vu.trip.entity.exception.TripValidationException;
+import lt.vu.trip.entity.exception.UserValidationException;
 import lt.vu.trip.entity.response.ErrorResponse;
 import lt.vu.trip.entity.response.ErrorType;
 import lt.vu.trip.service.trip.TripMergeException;
@@ -44,7 +45,13 @@ public class RestExceptionHandler {
 	public ResponseEntity tripMerge(TripMergeException ex, WebRequest request) {
 		log.debug("handling TripMergeException...");
 		return new ResponseEntity<>(
-				createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+			createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+	}
+	@ExceptionHandler({UserValidationException.class})
+	public ResponseEntity userValidation(UserValidationException ex, WebRequest request) {
+		log.debug("handling UserValidationException...");
+		return new ResponseEntity<>(
+			createError(ex.getMessage()), new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
 	}
 
 	@ExceptionHandler({ResourceNotFoundException.class})

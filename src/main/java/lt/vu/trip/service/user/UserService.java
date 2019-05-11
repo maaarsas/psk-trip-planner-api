@@ -11,4 +11,8 @@ public interface UserService {
 	List<User> searchUsers(String query);
 
 	User getUser(Long id);
+
+	User create(User user);
+
+	User updateUserRoles(User user);
 }
