@@ -1,5 +1,6 @@
 package lt.vu.trip.service.user;
 
+import lt.vu.trip.entity.request.UserRequest;
 import lt.vu.trip.entity.user.Role;
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.UserRepository;
@@ -54,40 +55,43 @@ class UserServiceImpl implements UserService {
 		return userRepository.findAll();
 	}
 
-	public User create(User user) {
-		validator.validate(user);
+	public User create(UserRequest userRequest) {
 		User newUser = User.builder()
-			.username(user.getUsername())
-			.password(passwordEncoder.encode(user.getPassword()))
-			.surname(user.getSurname())
-			.name(user.getName())
-			.roles((user.getRoles() == null || user.getRoles().isEmpty()) ? Arrays.asList(Role.USER) : user.getRoles())
+			.username(userRequest.getUsername())
+			.password(passwordEncoder.encode(userRequest.getPassword()))
+			.surname(userRequest.getSurname())
+			.name(userRequest.getName())
+			.roles((userRequest.getRoles() == null || userRequest.getRoles().isEmpty()) ? Arrays.asList(Role.USER) : userRequest.getRoles())
 			.build();
+		validator.validate(newUser);
 		userRepository.save(newUser);
 
 		return newUser;
 	}
 
-	public User updateUserRoles(User user) {
-		User existingUser = userRepository.findById(user.getId()).orElse(null);
+	public User updateUserRoles(Long id, UserRequest userRequest) {
+		User existingUser = userRepository.findById(id).orElse(null);
 		if (existingUser == null) {
 			throw new ResourceNotFoundException();
 		}
 
 		List<Role> roles = new ArrayList<>();
 
-		switch (user.getRoles().get(0)) {
+		switch (userRequest.getRoles().get(0)) {
 			case USER:
-				roles = user.getRoles();
+				roles.add(Role.USER);
 				break;
 			case ORGANIZER:
-				roles = Arrays.asList(Role.USER, Role.ORGANIZER);
+				roles.add(Role.USER);
+				roles.add(Role.ORGANIZER);
 				break;
 			case ADMINISTRATOR:
-				roles = Arrays.asList(Role.USER, Role.ORGANIZER, Role.ADMINISTRATOR);
+				roles.add(Role.USER);
+				roles.add(Role.ORGANIZER);
+				roles.add(Role.ADMINISTRATOR);
 				break;
 			default:
-				roles = Arrays.asList(Role.USER);
+				roles.add(Role.USER);
 		}
 
 		existingUser.setRoles(roles);

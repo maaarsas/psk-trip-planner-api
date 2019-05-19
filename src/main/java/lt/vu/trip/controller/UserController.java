@@ -1,5 +1,6 @@
 package lt.vu.trip.controller;
 
+import lt.vu.trip.entity.request.UserRequest;
 import lt.vu.trip.entity.response.UserResponse;
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.service.user.UserService;
@@ -45,16 +46,16 @@ public class UserController {
 
 	@Secured("ROLE_ADMINISTRATOR")
 	@PostMapping("")
-	public ResponseEntity<UserResponse> create(@RequestBody User user) {
-		User createdUser = userService.create(user);
+	public ResponseEntity<UserResponse> create(@RequestBody UserRequest userRequest) {
+		User createdUser = userService.create(userRequest);
 		return ResponseEntity.ok(new UserResponse(createdUser.getId(), createdUser.getName(),
 				createdUser.getSurname(), createdUser.getRoles()));
 	}
 
 	@Secured("ROLE_ADMINISTRATOR")
-	@PutMapping("/roles")
-	public ResponseEntity<UserResponse> updateUserRoles(@RequestBody User user) {
-		User createdUser = userService.updateUserRoles(user);
+	@PutMapping("/{id}/roles")
+	public ResponseEntity<UserResponse> updateUserRoles(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+		User createdUser = userService.updateUserRoles(id, userRequest);
 		return ResponseEntity.ok(new UserResponse(createdUser.getId(), createdUser.getName(),
 				createdUser.getSurname(), createdUser.getRoles()));
 	}

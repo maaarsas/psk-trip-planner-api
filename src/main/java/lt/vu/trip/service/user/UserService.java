@@ -1,5 +1,6 @@
 package lt.vu.trip.service.user;
 
+import lt.vu.trip.entity.request.UserRequest;
 import lt.vu.trip.entity.user.User;
 
 import java.util.List;
@@ -12,9 +13,9 @@ public interface UserService {
 
 	User getUser(Long id);
 
-	User create(User user);
+	User create(UserRequest userRequest);
 
-	User updateUserRoles(User user);
+	User updateUserRoles(Long id, UserRequest userRequest);
 
 	void delete(Long id);
 
