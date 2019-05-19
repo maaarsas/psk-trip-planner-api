@@ -100,10 +100,10 @@ public class TripServiceImpl implements TripService {
 			participation.setParticipant(user);
 			participation.setStatus(TripParticipationStatus.INVITED);
 			participation.setTrip(trip);
-			participation.setAccomodationStatus(tripParticipation.getAccomodationStatus());
+			participation.setAccommodationStatus(tripParticipation.getAccommodationStatus());
 			participation.setCarRentalStatus(tripParticipation.getCarRentalStatus());
 			participation.setFlightTicketStatus(tripParticipation.getFlightTicketStatus());
-			participation.setAccomodationPrice(tripParticipation.getAccomodationPrice());
+			participation.setAccommodationPrice(tripParticipation.getAccommodationPrice());
 			participation.setCarRentalPrice(tripParticipation.getCarRentalPrice());
 			participation.setFlightTicketPrice(tripParticipation.getFlightTicketPrice());
 			participations.add(participation);

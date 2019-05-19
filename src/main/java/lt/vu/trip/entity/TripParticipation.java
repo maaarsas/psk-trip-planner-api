@@ -46,13 +46,13 @@ public class TripParticipation {
 	private TripTaskStatus carRentalStatus;
 
 	@Enumerated(EnumType.STRING)
-	private TripTaskStatus accomodationStatus;
+	private TripTaskStatus accommodationStatus;
 
 	private Double flightTicketPrice;
 
 	private Double carRentalPrice;
 
-	private Double accomodationPrice;
+	private Double accommodationPrice;
 
 	@PrePersist
 	protected void onCreate() {
