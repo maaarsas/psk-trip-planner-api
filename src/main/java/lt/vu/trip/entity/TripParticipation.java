@@ -39,6 +39,21 @@ public class TripParticipation {
 	@Setter(AccessLevel.PRIVATE)
 	private LocalDateTime lastEditDateTime;
 
+	@Enumerated(EnumType.STRING)
+	private TripTaskStatus flightTicketStatus;
+
+	@Enumerated(EnumType.STRING)
+	private TripTaskStatus carRentalStatus;
+
+	@Enumerated(EnumType.STRING)
+	private TripTaskStatus accomodationStatus;
+
+	private Double flightTicketPrice;
+
+	private Double carRentalPrice;
+
+	private Double accomodationPrice;
+
 	@PrePersist
 	protected void onCreate() {
 		createdDateTime = LocalDateTime.now();

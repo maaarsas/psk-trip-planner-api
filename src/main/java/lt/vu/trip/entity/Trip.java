@@ -49,15 +49,6 @@ public class Trip {
 	@Enumerated(EnumType.STRING)
 	private TripStatus status = TripStatus.ACTIVE;
 
-	@Enumerated(EnumType.STRING)
-	private TripTaskStatus flightTicketStatus;
-
-	@Enumerated(EnumType.STRING)
-	private TripTaskStatus carRentalStatus;
-
-	@Enumerated(EnumType.STRING)
-	private TripTaskStatus accomodationStatus;
-
 	@Setter(AccessLevel.PRIVATE)
 	private LocalDateTime createdDateTime;
 

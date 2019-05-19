@@ -67,9 +67,6 @@ public class TripServiceImpl implements TripService {
 		trip.setEndDate(tripRequest.getEndDate());
 		trip.setFromOffice(getOffice(tripRequest.getFromOffice())); // also validates office
 		trip.setToOffice(getOffice(tripRequest.getToOffice())); // also validates office
-		trip.setAccomodationStatus(tripRequest.getAccomodationStatus());
-		trip.setCarRentalStatus(tripRequest.getCarRentalStatus());
-		trip.setFlightTicketStatus(tripRequest.getFlightTicketStatus());
 		trip.setOfficeReservations(createOfficeReservation(trip));
 
 		return repo.saveAndFlush(trip);
@@ -103,6 +100,12 @@ public class TripServiceImpl implements TripService {
 			participation.setParticipant(user);
 			participation.setStatus(TripParticipationStatus.INVITED);
 			participation.setTrip(trip);
+			participation.setAccomodationStatus(tripParticipation.getAccomodationStatus());
+			participation.setCarRentalStatus(tripParticipation.getCarRentalStatus());
+			participation.setFlightTicketStatus(tripParticipation.getFlightTicketStatus());
+			participation.setAccomodationPrice(tripParticipation.getAccomodationPrice());
+			participation.setCarRentalPrice(tripParticipation.getCarRentalPrice());
+			participation.setFlightTicketPrice(tripParticipation.getFlightTicketPrice());
 			participations.add(participation);
 		}
 
