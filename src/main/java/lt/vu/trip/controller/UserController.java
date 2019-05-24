@@ -3,6 +3,7 @@ package lt.vu.trip.controller;
 import lt.vu.trip.entity.request.UserRequest;
 import lt.vu.trip.entity.response.UserResponse;
 import lt.vu.trip.entity.user.User;
+import lt.vu.trip.interceptor.LogInterceptor;
 import lt.vu.trip.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class UserController {
 		return ResponseEntity.ok(users);
 	}
 
+	@LogInterceptor
 	@GetMapping("/me")
 	public ResponseEntity<UserResponse> getCurrentUser() {
 		User user = userService.getCurrentUser();
