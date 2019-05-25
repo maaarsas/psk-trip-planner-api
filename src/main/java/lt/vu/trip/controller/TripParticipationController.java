@@ -1,5 +1,6 @@
 package lt.vu.trip.controller;
 
+import lt.vu.trip.entity.TripParticipation;
 import lt.vu.trip.entity.response.ErrorBodyResponse;
 import lt.vu.trip.service.tripparticipation.TripParticipationService;
 import lt.vu.trip.service.tripparticipation.TripParticipationStatusChangeException;
@@ -7,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Secured("ROLE_USER")
 @RestController
@@ -38,5 +36,12 @@ public class TripParticipationController {
 		} catch (TripParticipationStatusChangeException e) {
 			return new ResponseEntity<>(new ErrorBodyResponse(e), HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@Secured("ROLE_ORGANIZER")
+	@PutMapping("")
+	public ResponseEntity updateParticipation(@RequestBody TripParticipation participation) {
+		tripParticipationService.update(participation);
+		return new ResponseEntity(null, HttpStatus.OK);
 	}
 }

@@ -29,6 +29,23 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 		changeStatus(tripParticipationId, TripParticipationStatus.REJECTED);
 	}
 
+	public void update(TripParticipation participationRequest) {
+		TripParticipation participation = repo.findById(participationRequest.getId()).orElse(null);
+
+		if (participation == null) {
+			throw new ResourceNotFoundException();
+		}
+
+		participation.setAccommodationPrice(participationRequest.getAccommodationPrice());
+		participation.setAccommodationStatus(participationRequest.getAccommodationStatus());
+		participation.setCarRentalPrice(participationRequest.getCarRentalPrice());
+		participation.setCarRentalStatus(participationRequest.getCarRentalStatus());
+		participation.setFlightTicketPrice(participationRequest.getFlightTicketPrice());
+		participation.setFlightTicketStatus(participationRequest.getFlightTicketStatus());
+
+		repo.saveAndFlush(participation);
+	}
+
 	private void changeStatus(Long tripParticipationId, TripParticipationStatus newStatus) {
 		Optional<TripParticipation> optTripParticipation = repo.findById(tripParticipationId);
 		if (!optTripParticipation.isPresent()) {
@@ -52,7 +69,7 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 			return false;
 		}
 		if (newStatus == TripParticipationStatus.REJECTED
-			&& (tripParticipation.getStatus() != TripParticipationStatus.INVITED
+				&& (tripParticipation.getStatus() != TripParticipationStatus.INVITED
 				&& tripParticipation.getStatus() != TripParticipationStatus.ACCEPTED)) {
 			return false;
 		}
