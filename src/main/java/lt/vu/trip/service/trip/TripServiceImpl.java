@@ -95,7 +95,7 @@ public class TripServiceImpl implements TripService {
 
 		trip.setTripParticipations(updateTripParticipations(tripRequest.getTripParticipations()));
 
-		return repo.saveAndFlush(trip);
+		return trip;
 	}
 
 	private Page<Trip> getList(int page, int resultsPerPage, TripSearchCriteria criteria) {
