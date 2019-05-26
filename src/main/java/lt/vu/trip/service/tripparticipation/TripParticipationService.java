@@ -7,5 +7,5 @@ public interface TripParticipationService {
 
 	void reject(Long tripParticipationId);
 
-	void update(TripParticipation participation);
+	TripParticipation update(TripParticipation participation);
 }

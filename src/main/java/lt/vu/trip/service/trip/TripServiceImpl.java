@@ -6,17 +6,20 @@ import lt.vu.trip.entity.response.ErrorType;
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.TripRepository;
 import lt.vu.trip.service.office.OfficeService;
+import lt.vu.trip.service.tripparticipation.TripParticipationService;
 import lt.vu.trip.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TripServiceImpl implements TripService {
@@ -29,6 +32,9 @@ public class TripServiceImpl implements TripService {
 
 	@Autowired
 	private OfficeService officeService;
+
+	@Autowired
+	private TripParticipationService tripParticipationService;
 
 	@Autowired
 	private TripValidator validator;
@@ -68,6 +74,18 @@ public class TripServiceImpl implements TripService {
 		trip.setFromOffice(getOffice(tripRequest.getFromOffice())); // also validates office
 		trip.setToOffice(getOffice(tripRequest.getToOffice())); // also validates office
 		trip.setOfficeReservations(createOfficeReservation(trip));
+
+		return repo.saveAndFlush(trip);
+	}
+
+	public Trip update(Trip tripRequest) {
+		Trip trip = repo.findById(tripRequest.getId()).orElse(null);
+
+		if (trip == null) {
+			throw new ResourceNotFoundException();
+		}
+
+		trip.setTripParticipations(updateTripParticipations(tripRequest.getTripParticipations()));
 
 		return repo.saveAndFlush(trip);
 	}
@@ -132,5 +150,11 @@ public class TripServiceImpl implements TripService {
 		}
 
 		return office;
+	}
+
+	private List<TripParticipation> updateTripParticipations(List<TripParticipation> tripRequestParticipations) {
+		return tripRequestParticipations.stream()
+				.map(participation -> tripParticipationService.update(participation))
+				.collect(Collectors.toList());
 	}
 }

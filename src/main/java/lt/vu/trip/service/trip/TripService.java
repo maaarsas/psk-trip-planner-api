@@ -13,4 +13,6 @@ public interface TripService {
 	Page<Trip> getCurrentUserInvitedIn(int page, int resultsPerPage, TripSearchCriteria criteria);
 
 	Trip create(Trip trip);
+
+	Trip update(Trip tripRequest);
 }

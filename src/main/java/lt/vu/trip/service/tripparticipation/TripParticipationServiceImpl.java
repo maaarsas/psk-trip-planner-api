@@ -29,7 +29,7 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 		changeStatus(tripParticipationId, TripParticipationStatus.REJECTED);
 	}
 
-	public void update(TripParticipation participationRequest) {
+	public TripParticipation update(TripParticipation participationRequest) {
 		TripParticipation participation = repo.findById(participationRequest.getId()).orElse(null);
 
 		if (participation == null) {
@@ -43,7 +43,7 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 		participation.setFlightTicketPrice(participationRequest.getFlightTicketPrice());
 		participation.setFlightTicketStatus(participationRequest.getFlightTicketStatus());
 
-		repo.saveAndFlush(participation);
+		return repo.saveAndFlush(participation);
 	}
 
 	private void changeStatus(Long tripParticipationId, TripParticipationStatus newStatus) {
