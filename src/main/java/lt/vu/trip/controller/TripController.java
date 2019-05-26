@@ -62,6 +62,12 @@ public class TripController {
 		return ResponseEntity.ok(tripService.create(trip));
 	}
 
+	@Secured({"ROLE_ADMINISTRATOR", "ROLE_ORGANIZER"})
+	@PutMapping("")
+	public ResponseEntity<Trip> update(@RequestBody Trip trip) {
+		return ResponseEntity.ok(tripService.update(trip));
+	}
+
 	private TripSearchCriteria buildSearchCriteriaFromRequest(TripRequestParams requestParams) {
 		return TripSearchCriteria.builder()
 				.startDateFrom(requestParams.getStartDateFrom())
