@@ -29,6 +29,11 @@ public class TripController {
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<Trip> getById(@PathVariable Long id) {
+		return ResponseEntity.ok(tripService.getById(id));
+	}
+
 	@GetMapping("/my")
 	public ResponseEntity<TripListResponse> getCurrentUserTrips(@Valid TripRequestParams requestParams) {
 		TripSearchCriteria criteria = buildSearchCriteriaFromRequest(requestParams);
