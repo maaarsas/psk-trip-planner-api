@@ -63,6 +63,14 @@ public class TripServiceImpl implements TripService {
 		return this.getList(page, resultsPerPage, criteria);
 	}
 
+	public Trip getById(Long id) {
+		Trip trip = repo.findById(id).orElse(null);
+		if (trip == null) {
+			throw new ResourceNotFoundException();
+		}
+		return trip;
+	}
+
 	public Trip create(Trip tripRequest) {
 		validator.validateTrip(tripRequest); // basic validation
 
