@@ -48,7 +48,7 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 	}
 
 	public List<TripParticipation> getAll(User user) {
-		return repo.findAllByParticipant(user);
+		return repo.findAllByParticipantAndStatusNot(user, TripParticipationStatus.REJECTED);
 	}
 
 	private void changeStatus(Long tripParticipationId, TripParticipationStatus newStatus) {
