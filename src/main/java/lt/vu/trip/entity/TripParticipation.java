@@ -40,13 +40,13 @@ public class TripParticipation {
 	private LocalDateTime lastEditDateTime;
 
 	@Enumerated(EnumType.STRING)
-	private TripTaskStatus flightTicketStatus;
+	private TripTaskStatus flightTicketStatus = TripTaskStatus.NOT_NEEDED;
 
 	@Enumerated(EnumType.STRING)
-	private TripTaskStatus carRentalStatus;
+	private TripTaskStatus carRentalStatus = TripTaskStatus.NOT_NEEDED;
 
 	@Enumerated(EnumType.STRING)
-	private TripTaskStatus accommodationStatus;
+	private TripTaskStatus accommodationStatus = TripTaskStatus.NOT_NEEDED;
 
 	private Double flightTicketPrice;
 
