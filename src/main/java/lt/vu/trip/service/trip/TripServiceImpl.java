@@ -2,6 +2,7 @@ package lt.vu.trip.service.trip;
 
 import lt.vu.trip.entity.*;
 import lt.vu.trip.entity.exception.TripValidationException;
+import lt.vu.trip.entity.exception.UserBusyException;
 import lt.vu.trip.entity.response.ErrorType;
 import lt.vu.trip.entity.user.User;
 import lt.vu.trip.repository.TripRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -122,6 +124,7 @@ public class TripServiceImpl implements TripService {
 			if (user == null) {
 				throw new TripValidationException(ErrorType.TRIP_VALIDATION_PARTICIPANT_DOES_NOT_EXIST.toString());
 			}
+			checkUserAvailability(user, tripRequest);
 			TripParticipation participation = new TripParticipation();
 			participation.setParticipant(user);
 			participation.setStatus(TripParticipationStatus.INVITED);
@@ -136,6 +139,20 @@ public class TripServiceImpl implements TripService {
 		}
 
 		return participations;
+	}
+
+	private void checkUserAvailability(User user, Trip currentTrip) {
+		LocalDate currentStart = currentTrip.getStartDate();
+		LocalDate currentEnd = currentTrip.getEndDate();
+		tripParticipationService.getAll(user).forEach(participation -> {
+			Trip trip = participation.getTrip();
+			LocalDate start = trip.getStartDate();
+			LocalDate end = trip.getEndDate();
+			if ((currentEnd.compareTo(start) >= 0 && currentEnd.compareTo(end) <= 0) //if new trip end in the middle of old one
+				|| (currentStart.compareTo(start) >= 0 && currentStart.compareTo(end) <= 0)) { // new trip starts in the middle of old one
+				throw new UserBusyException(ErrorType.USER_BUSY.toString(), user);
+			}
+		});
 	}
 
 	private List<OfficeReservation> createOfficeReservation(Trip trip) {
@@ -162,7 +179,7 @@ public class TripServiceImpl implements TripService {
 
 	private List<TripParticipation> updateTripParticipations(List<TripParticipation> tripRequestParticipations) {
 		return tripRequestParticipations.stream()
-				.map(participation -> tripParticipationService.update(participation))
-				.collect(Collectors.toList());
+			.map(participation -> tripParticipationService.update(participation))
+			.collect(Collectors.toList());
 	}
 }

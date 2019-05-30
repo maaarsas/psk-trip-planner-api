@@ -3,9 +3,12 @@ package lt.vu.trip.config;
 import lombok.extern.slf4j.Slf4j;
 import lt.vu.trip.entity.exception.OfficeValidationException;
 import lt.vu.trip.entity.exception.TripValidationException;
+import lt.vu.trip.entity.exception.UserBusyException;
 import lt.vu.trip.entity.exception.UserValidationException;
 import lt.vu.trip.entity.response.ErrorResponse;
 import lt.vu.trip.entity.response.ErrorType;
+import lt.vu.trip.entity.response.UserResponse;
+import lt.vu.trip.entity.user.User;
 import lt.vu.trip.service.trip.TripMergeException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -62,11 +65,24 @@ public class RestExceptionHandler {
 			createError(ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 
+	@ExceptionHandler({UserBusyException.class})
+	public ResponseEntity userBusy(UserBusyException ex, WebRequest request) {
+		log.debug("handling UserBusyException...");
+		User user = ex.getUser();
+		ErrorResponse error = new ErrorResponse(ErrorType.valueOf(ex.getMessage()),
+			new UserResponse(user.getId(), user.getName(),
+				user.getSurname(), null));
+		return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+	}
+
 	private ErrorResponse createError(String errorMessage) {
+		ErrorResponse error = new ErrorResponse();
 		try {
-			return new ErrorResponse(ErrorType.valueOf(errorMessage));
+			error.setError(ErrorType.valueOf(errorMessage));
+			return error;
 		} catch (Exception e) {
-			return new ErrorResponse(ErrorType.BE_FAILURE);
+			error.setError(ErrorType.BE_FAILURE);
+			return error;
 		}
 	}
 }

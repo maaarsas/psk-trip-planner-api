@@ -10,6 +10,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -44,6 +45,10 @@ public class TripParticipationServiceImpl implements TripParticipationService {
 		participation.setFlightTicketStatus(participationRequest.getFlightTicketStatus());
 
 		return repo.saveAndFlush(participation);
+	}
+
+	public List<TripParticipation> getAll(User user) {
+		return repo.findAllByParticipantAndStatusNot(user, TripParticipationStatus.REJECTED);
 	}
 
 	private void changeStatus(Long tripParticipationId, TripParticipationStatus newStatus) {

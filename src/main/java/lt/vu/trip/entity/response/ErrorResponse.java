@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class ErrorResponse {
 
 	private ErrorType error;
+
+	private UserResponse user;
 }
