@@ -53,7 +53,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
-		ErrorResponse errorResponse = new ErrorResponse(error);
+		ErrorResponse errorResponse = new ErrorResponse(error, null);
 		String errorResponseBody = this.gson.toJson(errorResponse);
 
 		response.getWriter().write(errorResponseBody);
