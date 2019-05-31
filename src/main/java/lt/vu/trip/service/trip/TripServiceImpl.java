@@ -148,8 +148,7 @@ public class TripServiceImpl implements TripService {
 			Trip trip = participation.getTrip();
 			LocalDate start = trip.getStartDate();
 			LocalDate end = trip.getEndDate();
-			if ((currentEnd.compareTo(start) >= 0 && currentEnd.compareTo(end) <= 0) //if new trip end in the middle of old one
-				|| (currentStart.compareTo(start) >= 0 && currentStart.compareTo(end) <= 0)) { // new trip starts in the middle of old one
+			if (currentStart.compareTo(end) <= 0 && currentEnd.compareTo(start) >= 0) {
 				throw new UserBusyException(ErrorType.USER_BUSY.toString(), user);
 			}
 		});
